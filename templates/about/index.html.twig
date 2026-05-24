@@ -1,0 +1,137 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}About Us - MediDent{% endblock %}
+
+{% block styles %}
+<style>
+    .page-header {
+        background: linear-gradient(135deg, rgba(26, 115, 167, 0.95), rgba(45, 189, 182, 0.9)), url('../assets/img/about.jpg') center/cover;
+        padding: 100px 0;
+        text-align: center;
+        color: var(--white);
+    }
+
+    .about-content {
+        padding: 80px 0;
+    }
+
+    .mission-vision {
+        background: var(--gray-100);
+        padding: 80px 0;
+    }
+
+    .mv-card {
+        background: var(--white);
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: var(--shadow);
+        height: 100%;
+        transition: var(--transition);
+    }
+
+    .mv-card:hover {
+        transform: translateY(-10px);
+        box-shadow: var(--shadow-hover);
+    }
+
+    .mv-icon {
+        width: 70px;
+        height: 70px;
+        background: var(--light-blue);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 30px;
+        color: var(--primary-blue);
+        margin-bottom: 25px;
+    }
+
+    .team-section {
+        padding: 80px 0;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>About Us</h1>
+            <p>Dedicated to providing exceptional dental care since 2010</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="about-content">
+        <div class="container">
+            <div class="row align-items-center" style="display: flex; gap: 50px; flex-wrap: wrap;">
+                <div class="col-lg-6" style="flex: 1; min-width: 300px;">
+                    <img src="{{ asset('assets/img/about1.png') }}" alt="Our Clinic" style="width: 100%; border-radius: 20px; box-shadow: var(--shadow);">
+                </div>
+                <div class="col-lg-6" style="flex: 1; min-width: 300px;">
+                    <h2 style="color: var(--dark-blue); margin-bottom: 20px;">Welcome to MediDent</h2>
+                    <p style="color: var(--gray-600); margin-bottom: 20px; line-height: 1.8;">
+                        At MediDent, we believe that a healthy smile is the foundation of a happy life. Our state-of-the-art clinic is equipped with the latest dental technology to ensure precise diagnoses and effective treatments.
+                    </p>
+                    <p style="color: var(--gray-600); margin-bottom: 30px; line-height: 1.8;">
+                        Our team of experienced dentists and friendly staff are committed to making your dental visit as comfortable and stress-free as possible. Whether you need a routine check-up, cosmetic enhancement, or complex restorative work, we are here to serve you with excellence.
+                    </p>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <i class="fas fa-check-circle" style="color: var(--primary-teal);"></i>
+                            <span>Experienced Team</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <i class="fas fa-check-circle" style="color: var(--primary-teal);"></i>
+                            <span>Modern Technology</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <i class="fas fa-check-circle" style="color: var(--primary-teal);"></i>
+                            <span>Comfortable Care</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <i class="fas fa-check-circle" style="color: var(--primary-teal);"></i>
+                            <span>Affordable Prices</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission & Vision -->
+    <section class="mission-vision">
+        <div class="container">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+                <div class="mv-card">
+                    <div class="mv-icon">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <h3>Our Mission</h3>
+                    <p style="color: var(--gray-600); line-height: 1.6;">
+                        To provide high-quality, patient-centered dental care in a safe and welcoming environment. We strive to educate our patients about oral health and help them achieve and maintain a lifetime of healthy smiles.
+                    </p>
+                </div>
+                <div class="mv-card">
+                    <div class="mv-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h3>Our Vision</h3>
+                    <p style="color: var(--gray-600); line-height: 1.6;">
+                        To be the leading dental care provider in the region, known for our clinical excellence, compassion, and commitment to innovation in dentistry.
+                    </p>
+                </div>
+                <div class="mv-card">
+                    <div class="mv-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3>Our Values</h3>
+                    <p style="color: var(--gray-600); line-height: 1.6;">
+                        Integrity, Excellence, Compassion, and Respect. These core values guide everything we do, from patient interactions to treatment planning and execution.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

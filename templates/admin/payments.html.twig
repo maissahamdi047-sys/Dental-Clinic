@@ -1,0 +1,128 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin Payments - MediDent{% endblock %}
+
+{% block styles %}
+<style>
+    .page-header { background: linear-gradient(135deg, rgba(26,115,167,0.95), rgba(45,189,182,0.9)), var(--page-header-image) center/cover; padding: 120px 0 80px; text-align: center; color: var(--white); }
+    .admin-section { padding: 80px 0; }
+    .admin-card { background: var(--white); border-radius: 20px; padding: 40px; box-shadow: var(--shadow); }
+    .table { width: 100%; border-collapse: collapse; }
+    .table th, .table td { padding: 14px 16px; border-bottom: 1px solid var(--gray-200); text-align: left; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
+    .form-group { margin-bottom: 12px; }
+    .form-group label { display: block; font-weight: 500; margin-bottom: 6px; color: var(--gray-800); }
+    .form-group input, .form-group select { width: 100%; padding: 12px 16px; border: 2px solid var(--gray-200); border-radius: 10px; }
+</style>
+{% endblock %}
+
+{% block body %}
+<section class="page-header" style="--page-header-image: url('https://images.unsplash.com/photo-1588771934966-7aa12acb266a?q=80&w=1920&auto=format&fit=crop')">
+    <div class="container">
+        <h1>Manage Payments</h1>
+        <ul class="breadcrumb">
+            <li><a href="{{ path('app_admin') }}">Admin</a></li>
+            <li>/</li>
+            <li class="active">Payments</li>
+        </ul>
+    </div>
+</section>
+
+<section class="admin-section">
+    <div class="container">
+        <div class="admin-card">
+            <table class="table" id="paymentsTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Appointment</th>
+                        <th>Amount</th>
+                        <th>Currency</th>
+                        <th>Method</th>
+                        <th>Status</th>
+                        <th>Reference</th>
+                        <th>Invoice</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in payments %}
+                        <tr>
+                            <td>{{ p.id }}</td>
+                            <td>{% if p.appointment %}#{{ p.appointment.id }}{% else %}—{% endif %}</td>
+                            <td>{{ p.amount }}</td>
+                            <td>{{ p.currency }}</td>
+                            <td>{{ p.method }}</td>
+                            <td>{{ p.status }}</td>
+                            <td>
+                                {% if p.reference %}
+                                    <span class="muted">Hidden</span>
+                                    <button type="button" class="btn btn-outline toggle-ref-btn" data-target="ref-{{ p.id }}">View Ref</button>
+                                    <span id="ref-{{ p.id }}" style="display:none; margin-left:6px;">{{ p.reference }}</span>
+                                {% else %}
+                                    —
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="/uploads/invoices/invoice-{{ p.id }}.pdf" target="_blank" class="btn btn-outline">Open PDF</a>
+                            </td>
+                            <td>{{ p.createdAt|date('Y-m-d H:i') }}</td>
+                            <td>
+                                <form method="post" action="{{ path('app_admin_payments_delete', {id: p.id}) }}">
+                                    <button type="submit" class="btn btn-secondary">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr><td colspan="8">No payments yet</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }}">{{ message }}</div>
+                {% endfor %}
+            {% endfor %}
+
+            <form id="newPaymentForm" method="POST" action="{{ path('app_admin_payments') }}" style="margin-top: 20px;">
+                <div class="form-row">
+                    <div class="form-group"><label>Appointment</label>
+                        <select name="appointment_id">
+                            <option value="">— None —</option>
+                            {% for a in appointments %}
+                                <option value="{{ a.id }}">#{{ a.id }} — {{ a.patient }} — {{ a.scheduledAt|date('Y-m-d H:i') }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group"><label>Amount</label><input name="amount" type="number" step="0.01" min="0" required></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Currency</label><select name="currency"><option>TND</option><option>USD</option><option>EUR</option></select></div>
+                    <div class="form-group"><label>Method</label><select name="method"><option>Cash</option><option>Card</option><option>Online</option></select></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Status</label><select name="status"><option>Pending</option><option>Paid</option><option>Failed</option></select></div>
+                    <div class="form-group"><label>Reference</label><input name="reference" type="text" placeholder="txn_..."></div>
+                </div>
+                <button type="submit" class="btn btn-primary">Record Payment</button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.querySelectorAll('.toggle-ref-btn').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    var id = btn.getAttribute('data-target');
+    var el = document.getElementById(id);
+    var hidden = el.style.display === 'none' || el.style.display === '';
+    el.style.display = hidden ? 'inline' : 'none';
+    btn.textContent = hidden ? 'Hide Ref' : 'View Ref';
+  });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,151 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My Dashboard - MediDent{% endblock %}
+
+{% block styles %}
+<style>
+    .page-header { background: linear-gradient(135deg, rgba(26,115,167,0.95), rgba(45,189,182,0.9)), var(--page-header-image) center/cover; padding: 120px 0 80px; text-align: center; color: var(--white); }
+    .dashboard { padding: 60px 0; }
+    .grid { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
+    .card { background: var(--white); border-radius: 16px; padding: 24px; box-shadow: var(--shadow); }
+    .table { width: 100%; border-collapse: collapse; }
+    .table th, .table td { padding: 12px 14px; border-bottom: 1px solid var(--gray-200); text-align: left; }
+    .status-badge { display:inline-block; padding:4px 10px; border-radius:999px; font-size:12px; }
+    .status-pending { background:#fff3cd; color:#856404; }
+    .status-accepted { background:#d4edda; color:#155724; }
+    .status-refused, .status-cancelled { background:#f8d7da; color:#721c24; }
+    .status-cancelrequested { background:#e2e3e5; color:#383d41; }
+    .actions form { margin-bottom:8px; }
+</style>
+{% endblock %}
+
+{% block body %}
+<section class="page-header" style="--page-header-image: url('https://images.unsplash.com/photo-1588771934966-7aa12acb266a?q=80&w=1920&auto=format&fit=crop')">
+    <div class="container">
+        <h1>Welcome, {{ app.session.get('patient_name') }}</h1>
+        <ul class="breadcrumb">
+            <li><a href="{{ path('app_home') }}">Home</a></li>
+            <li>/</li>
+            <li class="active">Dashboard</li>
+        </ul>
+    </div>
+    <div class="container" style="margin-top: 20px;">
+        <form method="post" action="{{ path('app_logout') }}">
+            <button type="submit" class="btn btn-outline">Logout</button>
+        </form>
+        <div style="margin-top: 10px;">
+            <a href="{{ path('app_appointment') }}" class="btn btn-primary" style="margin-right:10px;">
+                <i class="fas fa-calendar-check"></i> Book Appointment
+            </a>
+            <a href="#prescriptions" class="btn btn-outline" style="margin-right:10px;">
+                <i class="fas fa-file-medical"></i> Prescriptions
+            </a>
+            <a href="#payments" class="btn btn-outline">
+                <i class="fas fa-file-invoice"></i> Payments
+            </a>
+        </div>
+</section>
+
+<section class="dashboard">
+    <div class="container">
+        <div class="grid">
+            <div class="card">
+                <h2>Upcoming Appointments</h2>
+                <table class="table">
+                    <thead><tr><th>Date</th><th>Time</th><th>Service</th><th>Doctor</th><th>Status</th><th>Actions</th></tr></thead>
+                    <tbody>
+                        {% for a in appointments %}
+                            <tr>
+                                <td>{{ a.scheduledAt|date('Y-m-d') }}</td>
+                                <td>{{ a.scheduledAt|date('H:i') }}</td>
+                                <td>{{ a.service }}</td>
+                                <td>{{ a.doctor }}</td>
+                                <td>
+                                    {% set st = a.status %}
+                                    <span class="status-badge 
+                                        {% if st in ['Pending Approval','Pending Payment'] %}status-pending{% elseif st == 'Accepted' %}status-accepted{% elseif st in ['Refused','Cancelled'] %}status-refused{% elseif st == 'CancelRequested' %}status-cancelrequested{% endif %}">
+                                        {{ st }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="actions">
+                                        <form method="post" action="{{ path('app_patient_appointment_cancel', {id: a.id}) }}" style="display:inline;">
+                                            <button type="submit" class="btn btn-secondary">Cancel</button>
+                                        </form>
+                                    </div>
+                                    <div class="actions" style="margin-top:6px;">
+                                        <form method="post" action="{{ path('app_patient_appointment_reschedule', {id: a.id}) }}" style="display:inline;" class="reschedule-form">
+                                            <input type="date" name="date" required min="{{ 'now'|date('Y-m-d') }}">
+                                            <select name="time" required class="time-select">
+                                                <option value="">Choisir un horaire</option>
+                                            </select>
+                                            <select name="doctor" class="doctor-select">
+                                                <option{% if a.doctor == 'Dr. Smith' %} selected{% endif %}>Dr. Smith</option>
+                                                <option{% if a.doctor == 'Dr. Johnson' %} selected{% endif %}>Dr. Johnson</option>
+                                                <option{% if a.doctor == 'Dr. Lee' %} selected{% endif %}>Dr. Lee</option>
+                                            </select>
+                                            <button type="submit" class="btn btn-primary">Reschedule</button>
+                                        </form>
+                                        <small class="text-muted">Seules les dates futures et horaires disponibles sont proposés.</small>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr><td colspan="5">No appointments scheduled</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="card" id="prescriptions">
+                <h2>Prescriptions</h2>
+                <ul>
+                    {% for p in prescriptions %}
+                        <li>
+                            {{ p.sentAt|date('Y-m-d H:i') }} — <a href="/uploads/prescriptions/{{ p.filename }}" target="_blank">Download</a>
+                        </li>
+                    {% else %}
+                        <li>No prescriptions yet</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="card" id="payments">
+                <h2>Payments</h2>
+                <ul>
+                    {% for pay in payments %}
+                        <li>
+                            {{ pay.createdAt|date('Y-m-d H:i') }} — {{ pay.amount }} {{ pay.currency }} — {{ pay.status }}
+                            <a href="/uploads/invoices/invoice-{{ pay.id }}.pdf" target="_blank" class="btn btn-outline" style="margin-left:10px;">Invoice</a>
+                        </li>
+                    {% else %}
+                        <li>No payments yet</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="card">
+                <h2>My Messages</h2>
+                <ul style="list-style:none; padding:0;">
+                    {% for m in messages %}
+                        <li style="border-bottom:1px solid #eee; padding:10px 0;">
+                            <strong>{{ m.subject }}</strong> <small class="text-muted">{{ m.createdAt|date('Y-m-d') }}</small>
+                            <p style="margin:5px 0;">{{ m.message }}</p>
+                            {% if m.response %}
+                                <div style="background:#f8f9fa; padding:8px; border-radius:5px; margin-top:5px; border-left: 3px solid #2dbdb6;">
+                                    <strong>Response:</strong> {{ m.response }}
+                                </div>
+                            {% else %}
+                                <small class="text-muted">No response yet</small>
+                            {% endif %}
+                        </li>
+                    {% else %}
+                        <li>No messages sent</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ asset('assets/js/patient_dates.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,679 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Our Services - MediDent{% endblock %}
+
+{% block styles %}
+<style>
+    /* Page Header */
+    .page-header {
+        background: linear-gradient(135deg, rgba(26, 115, 167, 0.95), rgba(45, 189, 182, 0.9)), var(--page-header-image) center/cover;
+        padding: 120px 0 80px;
+        text-align: center;
+        color: var(--white);
+    }
+    
+    .page-header h1 {
+        font-size: 48px;
+        margin-bottom: 15px;
+    }
+    
+    .breadcrumb {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        list-style: none;
+    }
+    
+    .breadcrumb a {
+        color: rgba(255, 255, 255, 0.8);
+    }
+    
+    .breadcrumb a:hover {
+        color: var(--white);
+    }
+    
+    .breadcrumb .active {
+        color: var(--white);
+    }
+    
+    /* Services Overview */
+    .services-overview {
+        padding: 100px 0;
+    }
+    
+    .services-intro {
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto 60px;
+    }
+    
+    .services-intro h2 {
+        font-size: 36px;
+        color: var(--dark-blue);
+        margin-bottom: 20px;
+    }
+    
+    .services-intro p {
+        color: var(--gray-600);
+        font-size: 18px;
+        line-height: 1.8;
+    }
+    
+    /* Service Detail Section */
+    .service-detail {
+        padding: 80px 0;
+        border-bottom: 1px solid var(--gray-200);
+    }
+    
+    .service-detail:nth-child(even) {
+        background: var(--gray-100);
+    }
+    
+    .service-detail-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: center;
+    }
+    
+    .service-detail:nth-child(even) .service-detail-grid {
+        direction: rtl;
+    }
+    
+    .service-detail:nth-child(even) .service-detail-grid > * {
+        direction: ltr;
+    }
+    
+    .service-detail-image {
+        position: relative;
+    }
+    
+    .service-detail-image img {
+        width: 100%;
+        border-radius: 20px;
+        box-shadow: var(--shadow);
+    }
+    
+    .service-badge {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background: var(--gradient);
+        color: var(--white);
+        padding: 10px 25px;
+        border-radius: 50px;
+        font-weight: 600;
+    }
+    
+    .service-detail-content h2 {
+        font-size: 32px;
+        color: var(--dark-blue);
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .service-detail-content h2 i {
+        width: 60px;
+        height: 60px;
+        background: var(--light-blue);
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary-teal);
+        font-size: 24px;
+    }
+    
+    .service-detail-content p {
+        color: var(--gray-600);
+        line-height: 1.8;
+        margin-bottom: 25px;
+    }
+    
+    .service-features {
+        list-style: none;
+        margin-bottom: 30px;
+    }
+    
+    .service-features li {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 12px 0;
+        color: var(--gray-800);
+    }
+    
+    .service-features li i {
+        width: 30px;
+        height: 30px;
+        background: var(--primary-teal);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--white);
+        font-size: 12px;
+    }
+    
+    .service-price {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: var(--light-blue);
+        padding: 15px 25px;
+        border-radius: 12px;
+        margin-bottom: 25px;
+    }
+    
+    .service-price span {
+        color: var(--gray-600);
+    }
+    
+    .service-price strong {
+        font-size: 24px;
+        color: var(--primary-blue);
+    }
+    
+    /* Pricing Section */
+    .pricing-section {
+        padding: 100px 0;
+        background: linear-gradient(135deg, var(--dark-blue), #0a3a52);
+        color: var(--white);
+    }
+    
+    .pricing-section .section-title h2 {
+        color: var(--white);
+    }
+    
+    .pricing-section .section-title p {
+        color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .pricing-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+    }
+    
+    .pricing-card {
+        background: var(--white);
+        border-radius: 20px;
+        padding: 40px;
+        text-align: center;
+        position: relative;
+        transition: var(--transition);
+    }
+    
+    .pricing-card:hover {
+        transform: translateY(-10px);
+    }
+    
+    .pricing-card.featured {
+        transform: scale(1.05);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    }
+    
+    .pricing-card.featured:hover {
+        transform: scale(1.05) translateY(-10px);
+    }
+    
+    .pricing-badge {
+        position: absolute;
+        top: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--gradient);
+        color: var(--white);
+        padding: 8px 25px;
+        border-radius: 50px;
+        font-size: 13px;
+        font-weight: 600;
+    }
+    
+    .pricing-card h3 {
+        font-size: 22px;
+        color: var(--dark-blue);
+        margin-bottom: 15px;
+    }
+    
+    .pricing-amount {
+        margin-bottom: 25px;
+    }
+    
+    .pricing-amount .price {
+        font-size: 48px;
+        font-weight: 700;
+        color: var(--primary-blue);
+    }
+    
+    .pricing-amount .period {
+        color: var(--gray-600);
+    }
+    
+    .pricing-features {
+        list-style: none;
+        margin-bottom: 30px;
+        text-align: left;
+    }
+    
+    .pricing-features li {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--gray-200);
+        color: var(--gray-600);
+    }
+    
+    .pricing-features li:last-child {
+        border-bottom: none;
+    }
+    
+    .pricing-features li i {
+        color: var(--primary-teal);
+    }
+    
+    .pricing-features li.disabled {
+        opacity: 0.5;
+    }
+    
+    .pricing-features li.disabled i {
+        color: var(--gray-400);
+    }
+    
+    /* CTA Section */
+    .services-cta {
+        padding: 80px 0;
+        background: var(--light-blue);
+        text-align: center;
+    }
+    
+    .services-cta h2 {
+        font-size: 36px;
+        color: var(--dark-blue);
+        margin-bottom: 20px;
+    }
+    
+    .services-cta p {
+        color: var(--gray-600);
+        font-size: 18px;
+        max-width: 600px;
+        margin: 0 auto 30px;
+    }
+    
+    @media (max-width: 1024px) {
+        .service-detail-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .service-detail:nth-child(even) .service-detail-grid {
+            direction: ltr;
+        }
+        
+        .pricing-grid {
+            grid-template-columns: 1fr;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .pricing-card.featured {
+            transform: none;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .page-header h1 {
+            font-size: 32px;
+        }
+        
+        .service-detail-content h2 {
+            font-size: 24px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+    <!-- Page Header -->
+    <section class="page-header" style="--page-header-image: url('https://images.unsplash.com/photo-1629904853710-2b5b87f1cb30?q=80&w=1920&auto=format&fit=crop')">
+        <div class="container">
+            <h1 data-aos="fade-up">Our Dental Services</h1>
+            <ul class="breadcrumb" data-aos="fade-up" data-aos-delay="100">
+                <li><a href="{{ path('app_home') }}">Home</a></li>
+                <li>/</li>
+                <li class="active">Services</li>
+            </ul>
+        </div>
+    </section>
+    
+    <!-- Services Overview -->
+    <section class="services-overview">
+        <div class="container">
+            <div class="services-intro" data-aos="fade-up">
+                <h2>Comprehensive Dental Care</h2>
+                <p>At MediDent, we offer a full range of dental services to meet all your oral health needs. From routine check-ups to advanced cosmetic procedures, our experienced team is here to help you achieve and maintain a healthy, beautiful smile.</p>
+            </div>
+        </div>
+    </section>
+
+    {% if services is defined and services %}
+    <section class="service-detail" id="catalog">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>Available Services</h2>
+                <p>Browse offerings and book directly</p>
+            </div>
+            <div class="reviews-grid">
+                {% for s in services %}
+                    <div class="review-card" data-aos="fade-up">
+                        <div class="review-header">
+                            <img src="{{ s.imageUrl ?? 'assets/img/services.jpg' }}" alt="{{ s.name }}" class="review-avatar">
+                            <div class="review-author">
+                                <h4>{{ s.name }}</h4>
+                                <p>{{ s.durationMin }} min</p>
+                            </div>
+                        </div>
+                        <p class="review-text">{{ s.description }}</p>
+                        <div class="review-meta">
+                            <span class="review-service"><i class="fas fa-tag"></i> {{ s.price }} {{ 'TND' }}</span>
+                            {% if app.session.get('patient_id') %}
+                                <a href="{{ path('app_appointment') }}" class="btn btn-primary"><i class="fas fa-calendar-check"></i> Book</a>
+                            {% else %}
+                                <a href="{{ path('app_login') }}" class="btn btn-primary"><i class="fas fa-calendar-check"></i> Book</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    {% endif %}
+    
+    <!-- General Dentistry -->
+    <section class="service-detail" id="general">
+        <div class="container">
+            <div class="service-detail-grid">
+                <div class="service-detail-image" data-aos="fade-right">
+                    <img src="assets/img/nv/5.jpeg" alt="General Dentistry">
+                    <span class="service-badge">Most Popular</span>
+                </div>
+                <div class="service-detail-content" data-aos="fade-left">
+                    <h2><i class="fas fa-tooth"></i> General Dentistry</h2>
+                    <p>Our general dentistry services focus on preventing, diagnosing, and treating common dental issues. Regular check-ups and cleanings are essential for maintaining optimal oral health and catching problems early.</p>
+                    <ul class="service-features">
+                        <li><i class="fas fa-check"></i> Comprehensive dental examinations</li>
+                        <li><i class="fas fa-check"></i> Professional teeth cleaning</li>
+                        <li><i class="fas fa-check"></i> Dental fillings and restorations</li>
+                        <li><i class="fas fa-check"></i> Root canal therapy</li>
+                        <li><i class="fas fa-check"></i> Tooth extractions</li>
+                    </ul>
+                    <div class="service-price">
+                        <span>Starting from</span>
+                        <strong>$75</strong>
+                    </div>
+                    {% if app.session.get('patient_id') %}
+                    <a href="{{ path('app_appointment') }}" class="btn btn-primary">
+                        <i class="fas fa-calendar-check"></i> Book Appointment
+                    </a>
+                    {% else %}
+                    <a href="{{ path('app_login') }}" class="btn btn-primary">
+                        <i class="fas fa-calendar-check"></i> Book Appointment
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Cosmetic Dentistry -->
+    <section class="service-detail" id="cosmetic">
+        <div class="container">
+            <div class="service-detail-grid">
+                <div class="service-detail-image" data-aos="fade-left">
+                    <img src="assets/img/nv/1.avif" alt="Cosmetic Dentistry">
+                </div>
+                <div class="service-detail-content" data-aos="fade-right">
+                    <h2><i class="fas fa-smile"></i> Cosmetic Dentistry</h2>
+                    <p>Transform your smile with our cosmetic dentistry services. Whether you want whiter teeth, a straighter smile, or a complete smile makeover, we have the expertise and technology to help you achieve your dream smile.</p>
+                    <ul class="service-features">
+                        <li><i class="fas fa-check"></i> Professional teeth whitening</li>
+                        <li><i class="fas fa-check"></i> Porcelain veneers</li>
+                        <li><i class="fas fa-check"></i> Dental bonding</li>
+                        <li><i class="fas fa-check"></i> Smile makeovers</li>
+                        <li><i class="fas fa-check"></i> Gum contouring</li>
+                    </ul>
+                    <div class="service-price">
+                        <span>Starting from</span>
+                        <strong>$199</strong>
+                    </div>
+                    {% if app.session.get('patient_id') %}
+                    <a href="{{ path('app_appointment') }}" class="btn btn-primary">
+                        <i class="fas fa-calendar-check"></i> Book Appointment
+                    </a>
+                    {% else %}
+                    <a href="{{ path('app_login') }}" class="btn btn-primary">
+                        <i class="fas fa-calendar-check"></i> Book Appointment
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Orthodontics -->
+    <section class="service-detail" id="orthodontics">
+        <div class="container">
+            <div class="service-detail-grid">
+                <div class="service-detail-image" data-aos="fade-right">
+                    <img src="assets/img/nv/4.jpg" alt="Orthodontics">
+                </div>
+                <div class="service-detail-content" data-aos="fade-left">
+                    <h2><i class="fas fa-teeth"></i> Orthodontics</h2>
+                    <p>Achieve perfectly aligned teeth with our orthodontic treatments. We offer both traditional braces and modern clear aligners to straighten your teeth and correct bite issues for patients of all ages.</p>
+                    <ul class="service-features">
+                        <li><i class="fas fa-check"></i> Traditional metal braces</li>
+                        <li><i class="fas fa-check"></i> Ceramic braces</li>
+                        <li><i class="fas fa-check"></i> Invisalign clear aligners</li>
+                        <li><i class="fas fa-check"></i> Retainers</li>
+                        <li><i class="fas fa-check"></i> Bite correction</li>
+                    </ul>
+                    <div class="service-price">
+                        <span>Starting from</span>
+                        <strong>$2,500</strong>
+                    </div>
+                    {% if app.session.get('patient_id') %}
+                    <a href="{{ path('app_appointment') }}" class="btn btn-primary">
+                        <i class="fas fa-calendar-check"></i> Book Consultation
+                    </a>
+                    {% else %}
+                    <a href="{{ path('app_login') }}" class="btn btn-primary">
+                        <i class="fas fa-calendar-check"></i> Book Consultation
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Dental Implants -->
+    <section class="service-detail" id="implants">
+        <div class="container">
+            <div class="service-detail-grid">
+                <div class="service-detail-image" data-aos="fade-left">
+                    <img src="assets/img/nv/3.jpg" alt="Dental Implants">
+                </div>
+                <div class="service-detail-content" data-aos="fade-right">
+                    <h2><i class="fas fa-teeth-open"></i> Dental Implants</h2>
+                    <p>Replace missing teeth with permanent dental implants that look, feel, and function like natural teeth. Our implant specialists use advanced techniques for optimal results and faster recovery.</p>
+                    <ul class="service-features">
+                        <li><i class="fas fa-check"></i> Single tooth implants</li>
+                        <li><i class="fas fa-check"></i> Multiple tooth implants</li>
+                        <li><i class="fas fa-check"></i> All-on-4 implants</li>
+                        <li><i class="fas fa-check"></i> Implant-supported dentures</li>
+                        <li><i class="fas fa-check"></i> Bone grafting</li>
+                    </ul>
+                    <div class="service-price">
+                        <span>Starting from</span>
+                        <strong>$1,500</strong>
+                    </div>
+                    <a href="{{ path('app_appointment') }}" class="btn btn-primary">
+                        <i class="fas fa-calendar-check"></i> Book Consultation
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Pediatric Dentistry -->
+    <section class="service-detail" id="pediatric">
+        <div class="container">
+            <div class="service-detail-grid">
+                <div class="service-detail-image" data-aos="fade-right">
+                    <img src="assets/img/nv/2.jpg" alt="Pediatric Dentistry">
+                </div>
+                <div class="service-detail-content" data-aos="fade-left">
+                    <h2><i class="fas fa-child"></i> Pediatric Dentistry</h2>
+                    <p>We make dental visits fun and comfortable for children. Our pediatric specialists are trained to work with kids of all ages, helping them develop healthy dental habits that last a lifetime.</p>
+                    <ul class="service-features">
+                        <li><i class="fas fa-check"></i> Child-friendly examinations</li>
+                        <li><i class="fas fa-check"></i> Fluoride treatments</li>
+                        <li><i class="fas fa-check"></i> Dental sealants</li>
+                        <li><i class="fas fa-check"></i> Early orthodontic evaluation</li>
+                        <li><i class="fas fa-check"></i> Habit counseling</li>
+                    </ul>
+                    <div class="service-price">
+                        <span>Starting from</span>
+                        <strong>$50</strong>
+                    </div>
+                    <a href="{{ path('app_appointment') }}" class="btn btn-primary">
+                        <i class="fas fa-calendar-check"></i> Book Appointment
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Emergency Care -->
+    <section class="service-detail" id="emergency">
+        <div class="container">
+            <div class="service-detail-grid">
+                <div class="service-detail-image" data-aos="fade-left">
+                    <img src="assets/img/hero-carousel/hero-carousel-3.jpg" alt="Emergency Care">
+                </div>
+                <div class="service-detail-content" data-aos="fade-right">
+                    <h2><i class="fas fa-ambulance"></i> Emergency Care</h2>
+                    <p>Dental emergencies can happen anytime. Our team is available for same-day emergency appointments to provide immediate relief and treatment for urgent dental problems.</p>
+                    <ul class="service-features">
+                        <li><i class="fas fa-check"></i> Same-day appointments</li>
+                        <li><i class="fas fa-check"></i> Toothache relief</li>
+                        <li><i class="fas fa-check"></i> Broken tooth repair</li>
+                        <li><i class="fas fa-check"></i> Lost filling replacement</li>
+                        <li><i class="fas fa-check"></i> Dental trauma treatment</li>
+                    </ul>
+                    <div class="service-price">
+                        <span>Emergency consultation</span>
+                        <strong>$99</strong>
+                    </div>
+                    <a href="tel:+1234567891" class="btn btn-primary">
+                        <i class="fas fa-phone-alt"></i> Call Emergency Line
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Pricing Section -->
+    <section class="pricing-section">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>Our Pricing Plans</h2>
+                <p>Affordable dental care packages for individuals and families</p>
+            </div>
+            
+            <div class="pricing-grid">
+                <div class="pricing-card" data-aos="fade-up" data-aos-delay="100">
+                    <h3>Basic Care</h3>
+                    <div class="pricing-amount">
+                        <span class="price">$99</span>
+                        <span class="period">/visit</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> Dental examination</li>
+                        <li><i class="fas fa-check"></i> Professional cleaning</li>
+                        <li><i class="fas fa-check"></i> X-rays (if needed)</li>
+                        <li><i class="fas fa-check"></i> Oral health assessment</li>
+                        <li class="disabled"><i class="fas fa-times"></i> Whitening treatment</li>
+                        <li class="disabled"><i class="fas fa-times"></i> Priority scheduling</li>
+                    </ul>
+                    {% if app.session.get('patient_id') %}
+                        <a href="{{ path('app_appointment') }}" class="btn btn-outline" style="width: 100%;">Get Started</a>
+                    {% else %}
+                        <a href="{{ path('app_login') }}" class="btn btn-outline" style="width: 100%;">Get Started</a>
+                    {% endif %}
+                </div>
+                
+                <div class="pricing-card featured" data-aos="fade-up" data-aos-delay="200">
+                    <span class="pricing-badge">Most Popular</span>
+                    <h3>Complete Care</h3>
+                    <div class="pricing-amount">
+                        <span class="price">$249</span>
+                        <span class="period">/visit</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> Everything in Basic</li>
+                        <li><i class="fas fa-check"></i> Deep cleaning</li>
+                        <li><i class="fas fa-check"></i> Fluoride treatment</li>
+                        <li><i class="fas fa-check"></i> Whitening treatment</li>
+                        <li><i class="fas fa-check"></i> Priority scheduling</li>
+                        <li class="disabled"><i class="fas fa-times"></i> Family discount</li>
+                    </ul>
+                    {% if app.session.get('patient_id') %}
+                        <a href="{{ path('app_appointment') }}" class="btn btn-primary" style="width: 100%;">Get Started</a>
+                    {% else %}
+                        <a href="{{ path('app_login') }}" class="btn btn-primary" style="width: 100%;">Get Started</a>
+                    {% endif %}
+                </div>
+                
+                <div class="pricing-card" data-aos="fade-up" data-aos-delay="300">
+                    <h3>Family Plan</h3>
+                    <div class="pricing-amount">
+                        <span class="price">$599</span>
+                        <span class="period">/year</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> Up to 4 family members</li>
+                        <li><i class="fas fa-check"></i> 2 cleanings per person</li>
+                        <li><i class="fas fa-check"></i> All X-rays included</li>
+                        <li><i class="fas fa-check"></i> 20% off treatments</li>
+                        <li><i class="fas fa-check"></i> Priority scheduling</li>
+                        <li><i class="fas fa-check"></i> Emergency coverage</li>
+                    </ul>
+                    {% if app.session.get('patient_id') %}
+                        <a href="{{ path('app_appointment') }}" class="btn btn-outline" style="width: 100%;">Get Started</a>
+                    {% else %}
+                        <a href="{{ path('app_login') }}" class="btn btn-outline" style="width: 100%;">Get Started</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- CTA Section -->
+    <section class="services-cta">
+        <div class="container" data-aos="zoom-in">
+            <h2>Not Sure Which Service You Need?</h2>
+            <p>Schedule a consultation with our experts and we'll help you find the best treatment plan for your needs.</p>
+            {% if app.session.get('patient_id') %}
+            <a href="{{ path('app_appointment') }}" class="btn btn-primary">
+                <i class="fas fa-calendar-check"></i> Schedule Free Consultation
+            </a>
+            {% else %}
+            <a href="{{ path('app_login') }}" class="btn btn-primary">
+                <i class="fas fa-calendar-check"></i> Schedule Free Consultation
+            </a>
+            {% endif %}
+        </div>
+    </section>
+{% endblock %}

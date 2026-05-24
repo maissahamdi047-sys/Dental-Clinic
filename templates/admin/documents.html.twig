@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin Documents - MediDent{% endblock %}
+
+{% block styles %}
+<style>
+    .page-header { background: linear-gradient(135deg, rgba(26,115,167,0.95), rgba(45,189,182,0.9)), var(--page-header-image) center/cover; padding: 120px 0 80px; text-align: center; color: var(--white); }
+    .admin-section { padding: 80px 0; }
+    .admin-card { background: var(--white); border-radius: 20px; padding: 40px; box-shadow: var(--shadow); }
+    .form-group { margin-bottom: 18px; }
+    .form-group label { display: block; font-weight: 500; margin-bottom: 6px; color: var(--gray-800); }
+    .form-group input, .form-group select { width: 100%; padding: 12px 16px; border: 2px solid var(--gray-200); border-radius: 10px; }
+    .status { margin-top: 15px; font-weight: 600; color: var(--primary-blue); }
+</style>
+{% endblock %}
+
+{% block body %}
+<section class="page-header" style="--page-header-image: url('https://images.unsplash.com/photo-1588771934966-7aa12acb266a?q=80&w=1920&auto=format&fit=crop')">
+    <div class="container">
+        <h1>Send Prescription</h1>
+        <ul class="breadcrumb">
+            <li><a href="{{ path('app_admin') }}">Admin</a></li>
+            <li>/</li>
+            <li class="active">Documents</li>
+        </ul>
+    </div>
+</section>
+
+<section class="admin-section">
+    <div class="container">
+        <div class="admin-card">
+            <form method="POST" action="{{ path('app_admin_documents') }}" id="docForm" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="patientEmail">Patient Email</label>
+                    <input id="patientEmail" name="patientEmail" type="email" placeholder="patient@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="prescriptionFile">Prescription PDF</label>
+                    <input id="prescriptionFile" name="prescriptionFile" type="file" accept="application/pdf" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Send Prescription</button>
+                {% for label, messages in app.flashes %}
+                    {% for message in messages %}
+                        <div class="status alert alert-{{ label }}">{{ message }}</div>
+                    {% endfor %}
+                {% endfor %}
+                {% if sent %}
+                    <div class="status">Prescription processed</div>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const form = document.getElementById('docForm');
+    form.addEventListener('submit', (e) => {
+        const file = document.getElementById('prescriptionFile').files[0];
+        if (!file || file.type !== 'application/pdf') { e.preventDefault(); alert('Select a PDF file'); }
+    });
+</script>
+{% endblock %}

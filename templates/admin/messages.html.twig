@@ -1,0 +1,107 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin Messages - MediDent{% endblock %}
+
+{% block styles %}
+<style>
+    .page-header { background: linear-gradient(135deg, rgba(26,115,167,0.95), rgba(45,189,182,0.9)), var(--page-header-image) center/cover; padding: 120px 0 80px; text-align: center; color: var(--white); }
+    .admin-section { padding: 80px 0; }
+    .admin-card { background: var(--white); border-radius: 20px; padding: 40px; box-shadow: var(--shadow); }
+    .table { width: 100%; border-collapse: collapse; }
+    .table th, .table td { padding: 14px 16px; border-bottom: 1px solid var(--gray-200); text-align: left; vertical-align: top; }
+    .reply-form { margin-top: 10px; padding: 10px; background: var(--gray-100); border-radius: 8px; }
+    .reply-form textarea { width: 100%; padding: 10px; border: 1px solid var(--gray-200); border-radius: 5px; margin-bottom: 10px; }
+    .badge { padding: 4px 8px; border-radius: 4px; font-size: 12px; }
+    .badge-success { background: #d4edda; color: #155724; }
+    .badge-warning { background: #fff3cd; color: #856404; }
+</style>
+{% endblock %}
+
+{% block body %}
+<section class="page-header" style="--page-header-image: url('https://images.unsplash.com/photo-1588771934966-7aa12acb266a?q=80&w=1920&auto=format&fit=crop')">
+    <div class="container">
+        <h1>Contact Messages</h1>
+        <ul class="breadcrumb">
+            <li><a href="{{ path('app_admin') }}">Admin</a></li>
+            <li>/</li>
+            <li class="active">Messages</li>
+        </ul>
+    </div>
+</section>
+
+<section class="admin-section">
+    <div class="container">
+        <div class="admin-card">
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }}">{{ message }}</div>
+                {% endfor %}
+            {% endfor %}
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Sender</th>
+                        <th>Subject / Message</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for m in messages %}
+                        <tr>
+                            <td>{{ m.createdAt|date('Y-m-d H:i') }}</td>
+                            <td>
+                                <strong>{{ m.name }}</strong><br>
+                                <small>{{ m.email }}</small>
+                            </td>
+                            <td>
+                                <strong>{{ m.subject }}</strong><br>
+                                {{ m.message }}
+                                {% if m.response %}
+                                    <div style="margin-top: 10px; padding: 10px; background: #e9ecef; border-left: 3px solid var(--primary-teal);">
+                                        <strong>Admin Response:</strong><br>
+                                        {{ m.response }}
+                                        <br><small class="text-muted">Replied at {{ m.respondedAt|date('Y-m-d H:i') }}</small>
+                                    </div>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if m.response %}
+                                    <span class="badge badge-success">Replied</span>
+                                {% else %}
+                                    <span class="badge badge-warning">Pending</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <button class="btn btn-sm btn-primary" data-role="toggle-reply">
+                                    {% if m.response %}Edit Reply{% else %}Reply{% endif %}
+                                </button>
+                                <form method="post" action="{{ path('app_admin_messages_delete', {id: m.id}) }}" style="display:inline;" onsubmit="return confirm('Are you sure?');">
+                                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('admin_message_delete_' ~ m.id) }}">
+                                    <button type="submit" class="btn btn-sm btn-secondary">Delete</button>
+                                </form>
+                                
+                                <div id="reply-form-{{ m.id }}" class="reply-form" style="display:none;">
+                                    <form method="post" action="{{ path('app_admin_messages_reply', {id: m.id}) }}">
+                                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('admin_message_reply_' ~ m.id) }}">
+                                        <textarea name="response" rows="3" placeholder="Type your response...">{{ m.response }}</textarea>
+                                        <button type="submit" class="btn btn-sm btn-primary">Send Reply</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr><td colspan="5">No messages found</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ asset('assets/js/admin_messages.js') }}"></script>
+{% endblock %}

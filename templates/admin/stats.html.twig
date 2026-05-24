@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin Statistics - MediDent{% endblock %}
+
+{% block styles %}
+<style>
+    .page-header { background: linear-gradient(135deg, rgba(26,115,167,0.95), rgba(45,189,182,0.9)), var(--page-header-image) center/cover; padding: 120px 0 80px; text-align: center; color: var(--white); }
+    .admin-section { padding: 80px 0; }
+    .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    .card { background: var(--white); border-radius: 15px; padding: 25px; box-shadow: var(--shadow); text-align: center; }
+    .card h3 { font-size: 14px; color: var(--gray-600); margin-bottom: 10px; }
+    .card .value { font-size: 32px; color: var(--dark-blue); }
+    .chart { background: var(--white); border-radius: 15px; padding: 25px; box-shadow: var(--shadow); margin-top: 30px; }
+    canvas { width: 100%; height: 300px; background: var(--gray-100); border-radius: 10px; }
+</style>
+{% endblock %}
+
+{% block body %}
+<section class="page-header" style="--page-header-image: url('https://images.unsplash.com/photo-1588771934966-7aa12acb266a?q=80&w=1920&auto=format&fit=crop')">
+    <div class="container">
+        <h1>Statistics</h1>
+        <ul class="breadcrumb">
+            <li><a href="{{ path('app_admin') }}">Admin</a></li>
+            <li>/</li>
+            <li class="active">Stats</li>
+        </ul>
+    </div>
+</section>
+
+<section class="admin-section">
+    <div class="container">
+        <div class="cards">
+            <div class="card"><h3>Total Users</h3><div class="value" id="statUsers">0</div></div>
+            <div class="card"><h3>Appointments</h3><div class="value" id="statAppointments">0</div></div>
+            <div class="card"><h3>Today</h3><div class="value" id="statToday">0</div></div>
+            <div class="card"><h3>Revenue</h3><div class="value" id="statRevenue">$0</div></div>
+        </div>
+        <div class="chart">
+            <canvas id="chart"></canvas>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    async function loadStats() {
+        try {
+            const res = await fetch('http://localhost:3000/api/stats', { headers: { 'Accept': 'application/json' } });
+            const data = await res.json();
+            document.getElementById('statUsers').textContent = data.users ?? 0;
+            document.getElementById('statAppointments').textContent = data.appointments ?? 0;
+            document.getElementById('statToday').textContent = data.today ?? 0;
+            document.getElementById('statRevenue').textContent = data.revenue ? `$${data.revenue}` : '$0';
+            const canvas = document.getElementById('chart');
+            const ctx = canvas.getContext('2d');
+            const points = (data.week ?? [0,0,0,0,0,0,0]).map((v,i) => ({x: (i/(6))*canvas.width, y: canvas.height - (v/Math.max(...data.week,1))*canvas.height }));
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            ctx.strokeStyle = '#2dbdb6';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            points.forEach((p,i)=>{ if(i===0) ctx.moveTo(p.x,p.y); else ctx.lineTo(p.x,p.y); });
+            ctx.stroke();
+        } catch(e) {
+            document.getElementById('statUsers').textContent = '—';
+            document.getElementById('statAppointments').textContent = '—';
+            document.getElementById('statToday').textContent = '—';
+            document.getElementById('statRevenue').textContent = '—';
+        }
+    }
+    loadStats();
+</script>
+{% endblock %}
+

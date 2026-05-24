@@ -1,0 +1,486 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Our Doctors - MediDent{% endblock %}
+
+{% block styles %}
+<style>
+    /* Page Header */
+    .page-header {
+        background: linear-gradient(135deg, rgba(26, 115, 167, 0.95), rgba(45, 189, 182, 0.9)), var(--page-header-image) center/cover;
+        padding: 120px 0 80px;
+        text-align: center;
+        color: var(--white);
+    }
+    
+    .page-header h1 {
+        font-size: 48px;
+        margin-bottom: 15px;
+    }
+    
+    .breadcrumb {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        list-style: none;
+    }
+    
+    .breadcrumb a {
+        color: rgba(255, 255, 255, 0.8);
+    }
+    
+    .breadcrumb a:hover {
+        color: var(--white);
+    }
+    
+    .breadcrumb .active {
+        color: var(--white);
+    }
+    
+    /* Doctors Grid */
+    .doctors-section {
+        padding: 100px 0;
+    }
+    
+    .doctors-filter {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-bottom: 50px;
+        flex-wrap: wrap;
+    }
+    
+    .filter-btn {
+        padding: 12px 30px;
+        border: 2px solid var(--gray-200);
+        border-radius: 50px;
+        background: var(--white);
+        cursor: pointer;
+        font-weight: 500;
+        transition: var(--transition);
+    }
+    
+    .filter-btn:hover,
+    .filter-btn.active {
+        background: var(--gradient);
+        border-color: transparent;
+        color: var(--white);
+    }
+    
+    .doctors-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 40px;
+    }
+    
+    .doctor-card-full {
+        background: var(--white);
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        transition: var(--transition);
+    }
+    
+    .doctor-card-full:hover {
+        transform: translateY(-10px);
+        box-shadow: var(--shadow-hover);
+    }
+    
+    .doctor-card-image {
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .doctor-card-image img {
+        width: 100%;
+        height: 350px;
+        object-fit: cover;
+        transition: var(--transition);
+    }
+    
+    .doctor-card-full:hover .doctor-card-image img {
+        transform: scale(1.05);
+    }
+    
+    .doctor-specialty-badge {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background: var(--gradient);
+        color: var(--white);
+        padding: 8px 20px;
+        border-radius: 50px;
+        font-size: 13px;
+        font-weight: 500;
+    }
+    
+    .doctor-card-content {
+        padding: 30px;
+    }
+    
+    .doctor-card-content h3 {
+        font-size: 22px;
+        color: var(--dark-blue);
+        margin-bottom: 5px;
+    }
+    
+    .doctor-card-content .specialty {
+        color: var(--primary-teal);
+        font-weight: 500;
+        margin-bottom: 15px;
+    }
+    
+    .doctor-card-content p {
+        color: var(--gray-600);
+        font-size: 14px;
+        line-height: 1.7;
+        margin-bottom: 20px;
+    }
+    
+    .doctor-info-list {
+        list-style: none;
+        margin-bottom: 20px;
+    }
+    
+    .doctor-info-list li {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 0;
+        border-bottom: 1px solid var(--gray-200);
+        font-size: 14px;
+    }
+    
+    .doctor-info-list li:last-child {
+        border-bottom: none;
+    }
+    
+    .doctor-info-list i {
+        color: var(--primary-teal);
+        width: 20px;
+    }
+    
+    .doctor-card-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 20px;
+        border-top: 1px solid var(--gray-200);
+    }
+    
+    .doctor-social-links {
+        display: flex;
+        gap: 10px;
+    }
+    
+    .doctor-social-links a {
+        width: 40px;
+        height: 40px;
+        background: var(--light-blue);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary-blue);
+        transition: var(--transition);
+    }
+    
+    .doctor-social-links a:hover {
+        background: var(--gradient);
+        color: var(--white);
+    }
+    
+    /* Call to Action */
+    .join-team-section {
+        background: var(--light-blue);
+        padding: 80px 0;
+    }
+    
+    .join-team-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: center;
+    }
+    
+    .join-team-text h2 {
+        font-size: 36px;
+        color: var(--dark-blue);
+        margin-bottom: 20px;
+    }
+    
+    .join-team-text p {
+        color: var(--gray-600);
+        margin-bottom: 30px;
+        line-height: 1.8;
+    }
+    
+    .join-team-image img {
+        width: 100%;
+        border-radius: 20px;
+        box-shadow: var(--shadow);
+    }
+    
+    @media (max-width: 1024px) {
+        .doctors-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .join-team-content {
+            grid-template-columns: 1fr;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .doctors-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .page-header h1 {
+            font-size: 32px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+    <!-- Page Header -->
+    <section class="page-header" style="--page-header-image: url('https://images.unsplash.com/photo-1588771934966-7aa12acb266a?q=80&w=1920&auto=format&fit=crop')">
+        <div class="container">
+            <h1 data-aos="fade-up">Our Expert Doctors</h1>
+            <ul class="breadcrumb" data-aos="fade-up" data-aos-delay="100">
+                <li><a href="{{ path('app_home') }}">Home</a></li>
+                <li>/</li>
+                <li class="active">Our Doctors</li>
+            </ul>
+        </div>
+    </section>
+    
+    <!-- Doctors Section -->
+    <section class="doctors-section">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>Meet Our Dental Team</h2>
+                <p>Our experienced professionals are committed to providing exceptional dental care</p>
+            </div>
+            
+            <div class="doctors-filter" data-aos="fade-up">
+                <button class="filter-btn active" data-filter="all">All Doctors</button>
+                <button class="filter-btn" data-filter="general">General Dentistry</button>
+                <button class="filter-btn" data-filter="cosmetic">Cosmetic</button>
+                <button class="filter-btn" data-filter="orthodontics">Orthodontics</button>
+                <button class="filter-btn" data-filter="pediatric">Pediatric</button>
+                <button class="filter-btn" data-filter="surgery">Oral Surgery</button>
+            </div>
+            
+            <div class="doctors-grid">
+                <!-- Doctor 1 -->
+                <div class="doctor-card-full" data-aos="fade-up" data-category="general">
+                    <div class="doctor-card-image">
+                        <img src="assets/img/doctors/doctors-1.jpg" alt="Dr. John Smith">
+                        <span class="doctor-specialty-badge">Chief Dental Officer</span>
+                    </div>
+                    <div class="doctor-card-content">
+                        <h3>Dr. John Smith</h3>
+                        <p class="specialty">General Dentistry</p>
+                        <p>With over 20 years of experience, Dr. Smith leads our team with expertise in comprehensive dental care and complex procedures.</p>
+                        <ul class="doctor-info-list">
+                            <li><i class="fas fa-graduation-cap"></i> Harvard School of Dental Medicine</li>
+                            <li><i class="fas fa-certificate"></i> Board Certified</li>
+                            <li><i class="fas fa-clock"></i> Mon-Fri: 9AM - 5PM</li>
+                        </ul>
+                        <div class="doctor-card-footer">
+                            <div class="doctor-social-links">
+                                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="#"><i class="fas fa-envelope"></i></a>
+                            </div>
+                            {% if app.session.get('patient_id') %}
+                                <a href="{{ path('app_appointment') }}" class="btn btn-primary btn-sm">Book Now</a>
+                            {% else %}
+                                <a href="{{ path('app_login') }}" class="btn btn-primary btn-sm">Book Now</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Doctor 2 -->
+                <div class="doctor-card-full" data-aos="fade-up" data-aos-delay="100" data-category="cosmetic">
+                    <div class="doctor-card-image">
+                        <img src="assets/img/doctors/doctors-2.jpg" alt="Dr. Sarah Johnson">
+                        <span class="doctor-specialty-badge">Cosmetic Specialist</span>
+                    </div>
+                    <div class="doctor-card-content">
+                        <h3>Dr. Sarah Johnson</h3>
+                        <p class="specialty">Cosmetic Dentistry</p>
+                        <p>Dr. Johnson specializes in smile makeovers, teeth whitening, and veneers to help patients achieve their dream smile.</p>
+                        <ul class="doctor-info-list">
+                            <li><i class="fas fa-graduation-cap"></i> NYU College of Dentistry</li>
+                            <li><i class="fas fa-certificate"></i> AACD Member</li>
+                            <li><i class="fas fa-clock"></i> Mon-Sat: 10AM - 6PM</li>
+                        </ul>
+                        <div class="doctor-card-footer">
+                            <div class="doctor-social-links">
+                                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                                <a href="#"><i class="fab fa-instagram"></i></a>
+                                <a href="#"><i class="fas fa-envelope"></i></a>
+                            </div>
+                            {% if app.session.get('patient_id') %}
+                                <a href="{{ path('app_appointment') }}" class="btn btn-primary btn-sm">Book Now</a>
+                            {% else %}
+                                <a href="{{ path('app_login') }}" class="btn btn-primary btn-sm">Book Now</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Doctor 3 -->
+                <div class="doctor-card-full" data-aos="fade-up" data-aos-delay="200" data-category="orthodontics">
+                    <div class="doctor-card-image">
+                        <img src="assets/img/doctors/doctors-3.jpg" alt="Dr. Michael Lee">
+                        <span class="doctor-specialty-badge">Orthodontist</span>
+                    </div>
+                    <div class="doctor-card-content">
+                        <h3>Dr. Michael Lee</h3>
+                        <p class="specialty">Orthodontics</p>
+                        <p>Expert in braces and Invisalign treatments, Dr. Lee helps patients of all ages achieve perfectly aligned teeth.</p>
+                        <ul class="doctor-info-list">
+                            <li><i class="fas fa-graduation-cap"></i> UCLA School of Dentistry</li>
+                            <li><i class="fas fa-certificate"></i> Invisalign Certified</li>
+                            <li><i class="fas fa-clock"></i> Tue-Sat: 9AM - 5PM</li>
+                        </ul>
+                        <div class="doctor-card-footer">
+                            <div class="doctor-social-links">
+                                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="#"><i class="fas fa-envelope"></i></a>
+                            </div>
+                            <a href="{{ path('app_appointment') }}" class="btn btn-primary btn-sm">Book Now</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Doctor 4 -->
+                <div class="doctor-card-full" data-aos="fade-up" data-category="pediatric">
+                    <div class="doctor-card-image">
+                        <img src="assets/img/doctors/doctors-4.jpg" alt="Dr. Emily Davis">
+                        <span class="doctor-specialty-badge">Pediatric Dentist</span>
+                    </div>
+                    <div class="doctor-card-content">
+                        <h3>Dr. Emily Davis</h3>
+                        <p class="specialty">Pediatric Dentistry</p>
+                        <p>Dr. Davis creates a fun and comfortable environment for children, making dental visits enjoyable for our youngest patients.</p>
+                        <ul class="doctor-info-list">
+                            <li><i class="fas fa-graduation-cap"></i> Boston University</li>
+                            <li><i class="fas fa-certificate"></i> AAPD Member</li>
+                            <li><i class="fas fa-clock"></i> Mon-Fri: 8AM - 4PM</li>
+                        </ul>
+                        <div class="doctor-card-footer">
+                            <div class="doctor-social-links">
+                                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#"><i class="fas fa-envelope"></i></a>
+                            </div>
+                            <a href="{{ path('app_appointment') }}" class="btn btn-primary btn-sm">Book Now</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Doctor 5 -->
+                <div class="doctor-card-full" data-aos="fade-up" data-aos-delay="100" data-category="surgery">
+                    <div class="doctor-card-image">
+                        <img src="assets/img/doctors/doctors-5.jpg" alt="Dr. David Wilson">
+                        <span class="doctor-specialty-badge">Oral Surgeon</span>
+                    </div>
+                    <div class="doctor-card-content">
+                        <h3>Dr. David Wilson</h3>
+                        <p class="specialty">Oral Surgery</p>
+                        <p>Specialized in dental implants, wisdom teeth extraction, and complex surgical procedures with precision and care.</p>
+                        <ul class="doctor-info-list">
+                            <li><i class="fas fa-graduation-cap"></i> Columbia University</li>
+                            <li><i class="fas fa-certificate"></i> ABOMS Certified</li>
+                            <li><i class="fas fa-clock"></i> Wed-Sun: 9AM - 5PM</li>
+                        </ul>
+                        <div class="doctor-card-footer">
+                            <div class="doctor-social-links">
+                                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="#"><i class="fas fa-envelope"></i></a>
+                            </div>
+                            <a href="{{ path('app_appointment') }}" class="btn btn-primary btn-sm">Book Now</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Doctor 6 -->
+                <div class="doctor-card-full" data-aos="fade-up" data-aos-delay="200" data-category="general">
+                    <div class="doctor-card-image">
+                        <img src="assets/img/doctors/doctors-6.avif" alt="Dr. Amanda Chen">
+                        <span class="doctor-specialty-badge">General Dentist</span>
+                    </div>
+                    <div class="doctor-card-content">
+                        <h3>Dr. Amanda Chen</h3>
+                        <p class="specialty">General Dentistry</p>
+                        <p>Dr. Chen provides comprehensive dental care with a gentle approach, ensuring patient comfort throughout every procedure.</p>
+                        <ul class="doctor-info-list">
+                            <li><i class="fas fa-graduation-cap"></i> UPenn Dental School</li>
+                            <li><i class="fas fa-certificate"></i> ADA Member</li>
+                            <li><i class="fas fa-clock"></i> Mon-Thu: 8AM - 6PM</li>
+                        </ul>
+                        <div class="doctor-card-footer">
+                            <div class="doctor-social-links">
+                                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                                <a href="#"><i class="fab fa-instagram"></i></a>
+                                <a href="#"><i class="fas fa-envelope"></i></a>
+                            </div>
+                            <a href="{{ path('app_appointment') }}" class="btn btn-primary btn-sm">Book Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Join Our Team -->
+    <section class="join-team-section">
+        <div class="container">
+            <div class="join-team-content">
+                <div class="join-team-text" data-aos="fade-right">
+                    <h2>Join Our Growing Team</h2>
+                    <p>We're always looking for talented dental professionals to join our team. At MediDent, you'll find a supportive environment, state-of-the-art facilities, and the opportunity to make a real difference in patients' lives.</p>
+                    <p>If you're passionate about dental care and want to be part of an innovative team, we'd love to hear from you.</p>
+                    <a href="{{ path('app_contact') }}" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i> Contact Us About Careers
+                    </a>
+                </div>
+                <div class="join-team-image" data-aos="fade-left">
+                    <img src="assets/img/gallery/gallery-1.jpg" alt="Join Our Team">
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Filter functionality
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const doctorCards = document.querySelectorAll('.doctor-card-full');
+    
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            const filter = btn.dataset.filter;
+            
+            doctorCards.forEach(card => {
+                if (filter === 'all' || card.dataset.category === filter) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

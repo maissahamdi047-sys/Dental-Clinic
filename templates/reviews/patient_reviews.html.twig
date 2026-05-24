@@ -1,0 +1,690 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Patient Reviews - MediDent{% endblock %}
+
+{% block styles %}
+<style>
+    /* Page Header */
+    .page-header {
+        background: linear-gradient(135deg, rgba(26, 115, 167, 0.95), rgba(45, 189, 182, 0.9)), var(--page-header-image) center/cover;
+        padding: 120px 0 80px;
+        text-align: center;
+        color: var(--white);
+    }
+    
+    .page-header h1 {
+        font-size: 48px;
+        margin-bottom: 15px;
+    }
+    
+    .breadcrumb {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        list-style: none;
+    }
+    
+    .breadcrumb a {
+        color: rgba(255, 255, 255, 0.8);
+    }
+    
+    .breadcrumb a:hover {
+        color: var(--white);
+    }
+    
+    .breadcrumb .active {
+        color: var(--white);
+    }
+    
+    /* Stats Section */
+    .stats-section {
+        padding: 80px 0;
+        background: var(--white);
+        margin-top: -50px;
+        position: relative;
+        z-index: 10;
+    }
+    
+    .stats-card {
+        background: var(--white);
+        border-radius: 20px;
+        padding: 50px;
+        box-shadow: var(--shadow-hover);
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 40px;
+        text-align: center;
+    }
+    
+    .stat-item {
+        position: relative;
+    }
+    
+    .stat-item::after {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 1px;
+        height: 60px;
+        background: var(--gray-200);
+    }
+    
+    .stat-item:last-child::after {
+        display: none;
+    }
+    
+    .stat-icon {
+        width: 70px;
+        height: 70px;
+        background: var(--gradient);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        font-size: 28px;
+        color: var(--white);
+    }
+    
+    .stat-item h3 {
+        font-size: 42px;
+        color: var(--dark-blue);
+        margin-bottom: 5px;
+    }
+    
+    .stat-item p {
+        color: var(--gray-600);
+        font-size: 14px;
+    }
+
+    /* Reviews Section */
+    .reviews-section {
+        padding: 80px 0;
+        background: var(--gray-100);
+    }
+    
+    .reviews-filter {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-bottom: 50px;
+        flex-wrap: wrap;
+    }
+    
+    .filter-btn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 25px;
+        border: 2px solid var(--gray-200);
+        border-radius: 50px;
+        background: var(--white);
+        cursor: pointer;
+        font-weight: 500;
+        transition: var(--transition);
+    }
+    
+    .filter-btn:hover,
+    .filter-btn.active {
+        background: var(--gradient);
+        border-color: transparent;
+        color: var(--white);
+    }
+    
+    .filter-btn i {
+        color: #ffd700;
+    }
+    
+    .filter-btn.active i,
+    .filter-btn:hover i {
+        color: var(--white);
+    }
+    
+    .reviews-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+    }
+    
+    .review-card {
+        background: var(--white);
+        border-radius: 20px;
+        padding: 35px;
+        box-shadow: var(--shadow);
+        transition: var(--transition);
+        position: relative;
+    }
+    
+    .review-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-hover);
+    }
+    
+    .review-card::before {
+        content: '\f10d';
+        font-family: 'Font Awesome 6 Free';
+        font-weight: 900;
+        position: absolute;
+        top: 25px;
+        right: 30px;
+        font-size: 35px;
+        color: var(--light-blue);
+    }
+    
+    .review-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+    
+    .review-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid var(--light-blue);
+    }
+    
+    .review-author h4 {
+        font-size: 16px;
+        color: var(--dark-blue);
+        margin-bottom: 3px;
+    }
+    
+    .review-author p {
+        font-size: 13px;
+        color: var(--gray-600);
+    }
+    
+    .review-rating {
+        display: flex;
+        gap: 3px;
+        margin-bottom: 15px;
+    }
+    
+    .review-rating i {
+        color: #ffd700;
+        font-size: 14px;
+    }
+    
+    .review-text {
+        color: var(--gray-600);
+        line-height: 1.8;
+        font-style: italic;
+        margin-bottom: 20px;
+    }
+    
+    .review-service {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--light-blue);
+        padding: 8px 15px;
+        border-radius: 50px;
+        font-size: 13px;
+        color: var(--primary-blue);
+    }
+    
+    .review-date {
+        font-size: 12px;
+        color: var(--gray-600);
+        margin-top: 15px;
+    }
+    
+    /* Featured Review */
+    .featured-review {
+        background: linear-gradient(135deg, var(--primary-blue), var(--primary-teal));
+        color: var(--white);
+        padding: 60px;
+        border-radius: 20px;
+        margin-bottom: 50px;
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 40px;
+        align-items: center;
+    }
+    
+    .featured-review::before {
+        display: none;
+    }
+    
+    .featured-review-image {
+        text-align: center;
+    }
+    
+    .featured-review-image img {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 5px solid rgba(255, 255, 255, 0.3);
+    }
+    
+    .featured-review-content h3 {
+        font-size: 28px;
+        margin-bottom: 20px;
+    }
+    
+    .featured-review-content .review-rating {
+        margin-bottom: 20px;
+    }
+    
+    .featured-review-content .review-rating i {
+        font-size: 20px;
+    }
+    
+    .featured-review-content .review-text {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 18px;
+        margin-bottom: 25px;
+    }
+    
+    .featured-review-author h4 {
+        font-size: 20px;
+        margin-bottom: 5px;
+    }
+    
+    .featured-review-author p {
+        opacity: 0.8;
+    }
+    
+    /* Write Review Section */
+    .write-review-section {
+        padding: 100px 0;
+        background: var(--white);
+    }
+    
+    .write-review-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: center;
+    }
+    
+    .write-review-content h2 {
+        font-size: 36px;
+        color: var(--dark-blue);
+        margin-bottom: 20px;
+    }
+    
+    .write-review-content p {
+        color: var(--gray-600);
+        line-height: 1.8;
+        margin-bottom: 30px;
+    }
+    
+    .review-benefits {
+        list-style: none;
+    }
+    
+    .review-benefits li {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 15px 0;
+        border-bottom: 1px solid var(--gray-200);
+    }
+    
+    .review-benefits li:last-child {
+        border-bottom: none;
+    }
+    
+    .review-benefits li i {
+        width: 40px;
+        height: 40px;
+        background: var(--light-blue);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary-teal);
+    }
+    
+    .review-form-card {
+        background: var(--gray-100);
+        border-radius: 20px;
+        padding: 40px;
+    }
+    
+    .review-form-card h3 {
+        font-size: 22px;
+        color: var(--dark-blue);
+        margin-bottom: 25px;
+    }
+    
+    .rating-select {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+    
+    .rating-select input {
+        display: none;
+    }
+    
+    .rating-select label {
+        font-size: 30px;
+        color: var(--gray-200);
+        cursor: pointer;
+        transition: var(--transition);
+    }
+    
+    .rating-select label:hover,
+    .rating-select input:checked ~ label,
+    .rating-select label:hover ~ label {
+        color: #ffd700;
+    }
+    
+    .rating-select:hover label {
+        color: var(--gray-200);
+    }
+    
+    .rating-select label:hover,
+    .rating-select label:hover ~ label {
+        color: #ffd700;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group label {
+        display: block;
+        font-weight: 500;
+        margin-bottom: 8px;
+        color: var(--gray-800);
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 15px 20px;
+        border: 2px solid var(--gray-200);
+        border-radius: 12px;
+        font-family: inherit;
+        font-size: 15px;
+        transition: var(--transition);
+        background: var(--white);
+    }
+    
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: var(--primary-teal);
+        box-shadow: 0 0 0 4px rgba(45, 189, 182, 0.1);
+    }
+    
+    .form-group textarea {
+        min-height: 120px;
+        resize: vertical;
+    }
+    
+    /* Load More */
+    .load-more {
+        text-align: center;
+        margin-top: 50px;
+    }
+    
+    @media (max-width: 1024px) {
+        .stats-card {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .stat-item:nth-child(2)::after {
+            display: none;
+        }
+        
+        .reviews-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .featured-review {
+            grid-template-columns: 1fr;
+            text-align: center;
+        }
+        
+        .write-review-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .page-header h1 {
+            font-size: 32px;
+        }
+        
+        .stats-card {
+            grid-template-columns: 1fr;
+            padding: 30px;
+        }
+        
+        .stat-item::after {
+            display: none;
+        }
+        
+        .reviews-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .featured-review {
+            padding: 30px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+    <!-- Page Header -->
+    <section class="page-header" style="--page-header-image: url('https://images.unsplash.com/photo-1588771934966-7aa12acb266a?q=80&w=1920&auto=format&fit=crop')">
+        <div class="container">
+            <h1 data-aos="fade-up">Patient Reviews</h1>
+            <ul class="breadcrumb" data-aos="fade-up" data-aos-delay="100">
+                <li><a href="{{ path('app_home') }}">Home</a></li>
+                <li>/</li>
+                <li class="active">Reviews</li>
+            </ul>
+        </div>
+    </section>
+    
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-card" data-aos="fade-up">
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3>4.9</h3>
+                    <p>Average Rating</p>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3>2,500+</h3>
+                    <p>Total Reviews</p>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-smile"></i>
+                    </div>
+                    <h3>98%</h3>
+                    <p>Satisfaction Rate</p>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-thumbs-up"></i>
+                    </div>
+                    <h3>99%</h3>
+                    <p>Would Recommend</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Reviews Section -->
+    <section class="reviews-section">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>What Our Patients Say</h2>
+                <p>Real experiences from real patients who trust us with their smiles</p>
+            </div>
+            
+            <!-- Featured Review -->
+            <div class="featured-review" data-aos="fade-up">
+                <div class="featured-review-image">
+                    <img src="assets/img/testimonials/testimonials-2.jpg" alt="Featured Patient">
+                </div>
+                <div class="featured-review-content">
+                    <h3>"Life-Changing Experience!"</h3>
+                    <div class="review-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="review-text">"I was terrified of dentists for years, but MediDent completely changed my perspective. Dr. Smith and his team were incredibly patient and understanding. They took the time to explain every procedure and made sure I was comfortable throughout. My smile has never looked better, and I actually look forward to my dental visits now!"</p>
+                    <div class="featured-review-author">
+                        <h4>Maria Rodriguez</h4>
+                        <p>Complete Smile Makeover Patient</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Filter Buttons -->
+            <div class="reviews-filter" data-aos="fade-up">
+                <button class="filter-btn active" data-filter="all">All Reviews</button>
+                <button class="filter-btn" data-filter="5"><i class="fas fa-star"></i> 5 Stars</button>
+                <button class="filter-btn" data-filter="4"><i class="fas fa-star"></i> 4 Stars</button>
+                <button class="filter-btn" data-filter="general">General</button>
+                <button class="filter-btn" data-filter="cosmetic">Cosmetic</button>
+                <button class="filter-btn" data-filter="orthodontics">Orthodontics</button>
+            </div>
+            
+            <!-- Reviews Grid -->
+            <div class="reviews-grid">
+                {% for review in reviews %}
+                <div class="review-card" data-aos="fade-up" data-rating="{{ review.rating }}" data-service="general">
+                    <div class="review-header">
+                        <div class="stat-icon" style="width: 50px; height: 50px; font-size: 20px; margin: 0; background: var(--gradient);">
+                             <i class="fas fa-user"></i>
+                        </div>
+                        <div class="review-author">
+                            <h4>{{ review.author }}</h4>
+                            <p>Patient</p>
+                        </div>
+                    </div>
+                    <div class="review-rating">
+                        {% for i in 1..5 %}
+                            {% if i <= review.rating %}
+                                <i class="fas fa-star"></i>
+                            {% else %}
+                                <i class="far fa-star"></i>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <p class="review-text">"{{ review.comment }}"</p>
+                    <span class="review-service"><i class="fas fa-tooth"></i> General Dentistry</span>
+                    <p class="review-date">{{ review.createdAt|date('F j, Y') }}</p>
+                </div>
+                {% else %}
+                <div class="col-12 text-center" style="grid-column: 1/-1; padding: 40px;">
+                    <p>No reviews yet. Be the first to write one!</p>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <div class="write-review-grid" style="margin-top:80px;">
+                {% for label, messages in app.flashes %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ label }}" style="grid-column: 1/-1;">{{ message }}</div>
+                    {% endfor %}
+                {% endfor %}
+                <div class="review-form-card">
+                    <h3>Write a Review</h3>
+                    <form method="POST" action="{{ path('app_reviews') }}">
+                        <div class="form-row">
+                            <div class="form-group"><label>Your Name</label><input type="text" name="author" required></div>
+                            <div class="form-group"><label>Email (optional)</label><input type="email" name="email"></div>
+                        </div>
+                        <div class="rating-select">
+                            <input type="radio" id="r5" name="rating" value="5" checked><label for="r5">★</label>
+                            <input type="radio" id="r4" name="rating" value="4"><label for="r4">★</label>
+                            <input type="radio" id="r3" name="rating" value="3"><label for="r3">★</label>
+                            <input type="radio" id="r2" name="rating" value="2"><label for="r2">★</label>
+                            <input type="radio" id="r1" name="rating" value="1"><label for="r1">★</label>
+                        </div>
+                        <div class="form-group"><label>Comment</label><textarea name="comment" required></textarea></div>
+                        <button type="submit" class="btn btn-primary">Submit Review</button>
+                    </form>
+                </div>
+                 <div class="write-review-content" data-aos="fade-right">
+                    <h2>Share Your Experience</h2>
+                    <p>Your feedback helps us improve and helps others make informed decisions about their dental care. We value every review and take your comments seriously.</p>
+                    <ul class="review-benefits">
+                        <li>
+                            <i class="fas fa-heart"></i>
+                            <span>Help other patients find quality dental care</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-comments"></i>
+                            <span>Your voice matters to us</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-gift"></i>
+                            <span>Get 10% off your next visit for leaving a review</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Filter functionality
+    const filterBtns = document.querySelectorAll('.reviews-filter .filter-btn');
+    const reviewCards = document.querySelectorAll('.review-card');
+    
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            const filter = btn.dataset.filter;
+            
+            reviewCards.forEach(card => {
+                const rating = card.dataset.rating;
+                const service = card.dataset.service;
+                
+                if (filter === 'all' || rating === filter || service === filter) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
+    
+    // Star rating selection
+    const ratingLabels = document.querySelectorAll('.rating-select label');
+    ratingLabels.forEach((label, index) => {
+        label.addEventListener('click', () => {
+            ratingLabels.forEach((l, i) => {
+                if (i <= index) {
+                    l.style.color = '#ffd700';
+                } else {
+                    l.style.color = '#e9ecef';
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,217 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Forgot Password - MediDent{% endblock %}
+
+{% block styles %}
+<style>
+    /* Auth Page Styles */
+    .auth-section {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, rgba(26, 115, 167, 0.05), rgba(45, 189, 182, 0.08));
+        padding: 180px 20px 80px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .auth-section::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -20%;
+        width: 600px;
+        height: 600px;
+        background: radial-gradient(circle, rgba(45, 189, 182, 0.1) 0%, transparent 70%);
+        border-radius: 50%;
+        animation: float 6s ease-in-out infinite;
+    }
+    
+    .auth-section::after {
+        content: '';
+        position: absolute;
+        bottom: -30%;
+        left: -10%;
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, rgba(26, 115, 167, 0.1) 0%, transparent 70%);
+        border-radius: 50%;
+        animation: float 8s ease-in-out infinite reverse;
+    }
+    
+    .auth-container {
+        display: grid;
+        grid-template-columns: 1fr;
+        max-width: 600px;
+        width: 100%;
+        background: var(--white);
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 25px 80px rgba(0, 0, 0, 0.1);
+        position: relative;
+        z-index: 1;
+    }
+    
+    /* Auth Form */
+    .auth-form-container {
+        padding: 60px 50px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    
+    .auth-form-container h1 {
+        font-size: 28px;
+        color: var(--dark-blue);
+        margin-bottom: 10px;
+    }
+    
+    .auth-form-container > p {
+        color: var(--gray-600);
+        margin-bottom: 35px;
+    }
+    
+    .auth-form .form-group {
+        margin-bottom: 22px;
+    }
+    
+    .auth-form .form-group label {
+        display: block;
+        font-weight: 500;
+        margin-bottom: 8px;
+        color: var(--gray-800);
+        font-size: 14px;
+    }
+    
+    .input-wrapper {
+        position: relative;
+    }
+    
+    .input-wrapper i {
+        position: absolute;
+        left: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--gray-600);
+        transition: var(--transition);
+    }
+    
+    .input-wrapper input {
+        width: 100%;
+        padding: 16px 20px 16px 50px;
+        border: 2px solid var(--gray-200);
+        border-radius: 12px;
+        font-family: inherit;
+        font-size: 15px;
+        transition: var(--transition);
+    }
+    
+    .input-wrapper input:focus {
+        outline: none;
+        border-color: var(--primary-teal);
+        box-shadow: 0 0 0 4px rgba(45, 189, 182, 0.1);
+    }
+    
+    .input-wrapper input:focus + i,
+    .input-wrapper:focus-within i {
+        color: var(--primary-teal);
+    }
+    
+    .auth-btn {
+        width: 100%;
+        padding: 16px;
+        background: var(--gradient);
+        color: var(--white);
+        border: none;
+        border-radius: 12px;
+        font-family: inherit;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+    
+    .auth-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(26, 115, 167, 0.3);
+    }
+    
+    .auth-footer {
+        text-align: center;
+        margin-top: 30px;
+        font-size: 14px;
+        color: var(--gray-600);
+    }
+    
+    .auth-footer a {
+        color: var(--primary-blue);
+        font-weight: 600;
+    }
+    
+    .auth-footer a:hover {
+        color: var(--primary-teal);
+        text-decoration: underline;
+    }
+    
+    /* Alert Styles */
+    .alert {
+        padding: 15px 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 14px;
+    }
+    
+    .alert-error {
+        background: #fee2e2;
+        color: #dc2626;
+        border: 1px solid #fecaca;
+    }
+    
+    .alert-success {
+        background: #d1fae5;
+        color: #059669;
+        border: 1px solid #a7f3d0;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<section class="auth-section">
+    <div class="auth-container centered" data-aos="fade-up" style="max-width:600px; grid-template-columns: 1fr;">
+        <div class="auth-form-container">
+            <h1>Forgot Password</h1>
+            <p>Entrez votre adresse email pour recevoir un lien de réinitialisation</p>
+            {% for message in app.flashes('error') %}
+                <div class="alert alert-error">{{ message }}</div>
+            {% endfor %}
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success">{{ message }}</div>
+            {% endfor %}
+            <form class="auth-form" method="POST" action="{{ path('app_forgot') }}">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <div class="input-wrapper">
+                        <input type="email" id="email" name="email" placeholder="you@example.com" required>
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                </div>
+                <button type="submit" class="auth-btn">
+                    <i class="fas fa-paper-plane"></i>
+                    Envoyer le lien
+                </button>
+            </form>
+            <div class="auth-footer" style="margin-top:15px;">
+                <a href="{{ path('app_login') }}">Retour à la connexion</a>
+            </div>
+        </div>
+    </div>
+    </section>
+{% endblock %}

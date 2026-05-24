@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Maquette E‑commerce Soins Bucco‑dentaires & Dermatologiques</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --panel: #ffffff;
+      --border: #e5e7eb;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --accent: #0ea5e9;
+      --gray: #9ca3af;
+      --green: #22c55e;
+    }
+    body { margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", sans-serif; background: var(--bg); color: var(--text); }
+    .container { max-width: 1100px; margin: 0 auto; padding: 24px; }
+    .shop { display: grid; grid-template-columns: 320px minmax(0,1fr); gap: 28px; align-items: start; }
+    .filters-toggle { display:none; margin-bottom: 14px; }
+    .filters-toggle button { display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border: none; border-radius: 10px; background: var(--accent); color: #fff; font-weight: 600; cursor: pointer; }
+    .sidebar { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 18px; }
+    .title { font-size: 13px; font-weight: 800; letter-spacing: .4px; text-transform: uppercase; margin-bottom: 10px; color: var(--text); }
+    .muted { color: var(--muted); }
+    .separator { margin: 10px 0 16px; font-weight: 700; color: var(--gray); }
+    .cats { list-style: none; padding: 0; margin: 0; }
+    .cats li a { display:flex; justify-content: space-between; align-items:center; text-decoration:none; color: var(--text); padding: 8px 10px; border-radius: 8px; }
+    .cats li a:hover { background: #f3f4f6; }
+    .count { color: var(--gray); font-weight: 700; }
+    .range { width: 100%; margin-top: 8px; }
+    .products { display: grid; grid-template-columns: 1fr; gap: 14px; }
+    .card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+    .name { font-size: 16px; font-weight: 800; text-transform: uppercase; }
+    .price-row { display:flex; align-items:baseline; gap: 10px; margin-top: 10px; }
+    .price { font-size: 22px; font-weight: 800; color: var(--text); }
+    .old { font-size: 16px; color: var(--gray); text-decoration: line-through; font-weight: 700; }
+    @media (max-width: 900px) {
+      .shop { grid-template-columns: 1fr; }
+      .filters-toggle { display:block; }
+      .sidebar { display: none; }
+      .sidebar.open { display:block; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="filters-toggle">
+      <button type="button" onclick="document.querySelector('.sidebar').classList.toggle('open')">
+        <span>☰</span> Filtres
+      </button>
+    </div>
+    <div class="shop">
+      <aside class="sidebar">
+        <div>
+          <div class="title">Filtrer par prix</div>
+          <div class="muted">Prix : 0 DT — 200 DT</div>
+          <input class="range" type="range" min="0" max="200" value="200" oninput="document.getElementById('rangeOut').innerText='Prix max: '+this.value+' DT'">
+          <div id="rangeOut" class="muted">Prix max: 200 DT</div>
+        </div>
+        <div class="separator">---</div>
+        <div>
+          <div class="title">Filtrer par catégories</div>
+          <ul class="cats">
+            <li><a href="#"><span>Hygiène quotidienne</span><span class="count">(90)</span></a></li>
+            <li><a href="#"><span>Post-chirurgie</span><span class="count">(79)</span></a></li>
+            <li><a href="#"><span>Orthodontie</span><span class="count">(66)</span></a></li>
+            <li><a href="#"><span>Blanchiment</span><span class="count">(49)</span></a></li>
+            <li><a href="#"><span>Soins gencives</span><span class="count">(54)</span></a></li>
+          </ul>
+        </div>
+        <div class="separator">---</div>
+      </aside>
+      <main>
+        <div class="products">
+          <div class="card">
+            <div class="name">AVENE CICALFATE CREME MAINS 100ML</div>
+            <div class="separator">---</div>
+            <div class="price-row">
+              <div class="price">34.70 DT</div>
+              <div class="old">38.60 DT</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="name">BIODERMA A TODERM CRÈME MAINS ET ONGLES 50 ML</div>
+            <div class="separator">---</div>
+            <div class="price-row">
+              <div class="price">18.59 DT</div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

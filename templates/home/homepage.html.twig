@@ -1,0 +1,1115 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}MediDent - Your Trusted Dental Care Partner{% endblock %}
+
+{% block styles %}
+<style>
+    /* ==================== HERO SECTION ==================== */
+    .page-header {
+        background: linear-gradient(135deg, rgba(26, 115, 167, 0.95), rgba(45, 189, 182, 0.9)), var(--page-header-image) center/cover;
+        padding: 120px 0 80px;
+        text-align: center;
+        color: var(--white);
+    }
+
+    .hero {
+        min-height: 100vh;
+        background: linear-gradient(135deg, rgba(26, 115, 167, 0.35), rgba(45, 189, 182, 0.3)), var(--page-header-image, url('https://images.unsplash.com/photo-1588771934966-7aa12acb266a?q=80&w=1920&auto=format&fit=crop'));
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        display: flex;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+        margin-top: -80px;
+        padding-top: 80px;
+    }
+    
+    .hero::before {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 150px;
+        background: linear-gradient(to top, var(--white), transparent);
+    }
+    
+    .hero-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: center;
+    }
+    
+    .hero-text {
+        color: var(--white);
+    }
+    
+    .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        padding: 10px 20px;
+        border-radius: 50px;
+        font-size: 14px;
+        margin-bottom: 25px;
+        animation: fadeInUp 0.8s ease;
+    }
+    
+    .hero-badge i {
+        color: #ffd700;
+    }
+    
+    .hero-text h1 {
+        font-size: 56px;
+        line-height: 1.2;
+        margin-bottom: 25px;
+        animation: fadeInUp 0.8s ease 0.2s both;
+    }
+    
+    .hero-text h1 span {
+        color: #a8e6cf;
+    }
+    
+    .hero-text p {
+        font-size: 18px;
+        opacity: 0.9;
+        margin-bottom: 35px;
+        line-height: 1.8;
+        animation: fadeInUp 0.8s ease 0.4s both;
+    }
+    
+    .hero-buttons {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 40px;
+        animation: fadeInUp 0.8s ease 0.6s both;
+    }
+    
+    .hero-stats {
+        display: flex;
+        gap: 40px;
+        animation: fadeInUp 0.8s ease 0.8s both;
+    }
+    
+    .hero-stat {
+        text-align: center;
+    }
+    
+    .hero-stat h3 {
+        font-size: 36px;
+        margin-bottom: 5px;
+    }
+    
+    .hero-stat p {
+        font-size: 14px;
+        opacity: 0.8;
+        margin: 0;
+    }
+    
+    .hero-image {
+        position: relative;
+        animation: slideInRight 1s ease;
+    }
+    
+    .hero-image img {
+        width: 100%;
+        border-radius: 30px;
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+    }
+    
+    .hero-floating-card {
+        position: absolute;
+        background: var(--white);
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: var(--shadow-hover);
+        animation: float 3s ease-in-out infinite;
+    }
+    
+    .hero-floating-card.card-1 {
+        top: 10%;
+        left: -30px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .hero-floating-card.card-1 .icon {
+        width: 50px;
+        height: 50px;
+        background: var(--gradient);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--white);
+        font-size: 20px;
+    }
+    
+    .hero-floating-card.card-1 h4 {
+        font-size: 14px;
+        color: var(--dark-blue);
+    }
+    
+    .hero-floating-card.card-1 p {
+        font-size: 12px;
+        color: var(--gray-600);
+        margin: 0;
+    }
+    
+    .hero-floating-card.card-2 {
+        bottom: 15%;
+        right: -20px;
+        animation-delay: 1s;
+    }
+    
+    .hero-floating-card.card-2 .rating {
+        display: flex;
+        gap: 3px;
+        color: #ffd700;
+        margin-bottom: 5px;
+    }
+    
+    .hero-floating-card.card-2 h4 {
+        font-size: 24px;
+        color: var(--dark-blue);
+    }
+    
+    .hero-floating-card.card-2 p {
+        font-size: 12px;
+        color: var(--gray-600);
+        margin: 0;
+    }
+    
+    /* ==================== ABOUT SECTION ==================== */
+    .about-section {
+        padding: 100px 0;
+        background: var(--white);
+    }
+    
+    .about-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: center;
+    }
+    
+    .about-images {
+        position: relative;
+    }
+    
+    .about-main-image {
+        width: 80%;
+        border-radius: 20px;
+        box-shadow: var(--shadow);
+    }
+    
+    .about-secondary-image {
+        position: absolute;
+        width: 60%;
+        bottom: -30px;
+        right: 0;
+        border-radius: 20px;
+        box-shadow: var(--shadow-hover);
+        border: 5px solid var(--white);
+    }
+    
+    .about-experience-badge {
+        position: absolute;
+        top: 50%;
+        left: -20px;
+        transform: translateY(-50%);
+        background: var(--gradient);
+        color: var(--white);
+        padding: 25px;
+        border-radius: 15px;
+        text-align: center;
+        box-shadow: var(--shadow-hover);
+    }
+    
+    .about-experience-badge h3 {
+        font-size: 42px;
+        margin-bottom: 5px;
+    }
+    
+    .about-experience-badge p {
+        font-size: 14px;
+        margin: 0;
+    }
+    
+    .about-content h2 {
+        font-size: 36px;
+        color: var(--dark-blue);
+        margin-bottom: 20px;
+    }
+    
+    .about-content .subtitle {
+        color: var(--primary-teal);
+        font-weight: 600;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-size: 14px;
+    }
+    
+    .about-content p {
+        color: var(--gray-600);
+        margin-bottom: 30px;
+        line-height: 1.8;
+    }
+    
+    .about-features {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+    
+    .about-feature {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .about-feature i {
+        width: 40px;
+        height: 40px;
+        background: var(--light-blue);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary-teal);
+    }
+    
+    .about-feature span {
+        font-weight: 500;
+        color: var(--gray-800);
+    }
+    
+    /* ==================== SERVICES PREVIEW ==================== */
+    .services-preview {
+        background: var(--gray-100);
+        padding: 100px 0;
+    }
+    
+    .services-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+    }
+    
+    .service-card {
+        background: var(--white);
+        border-radius: 20px;
+        padding: 40px 30px;
+        text-align: center;
+        box-shadow: var(--shadow);
+        transition: var(--transition);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .service-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: var(--gradient);
+        transform: scaleX(0);
+        transition: var(--transition);
+    }
+    
+    .service-card:hover {
+        transform: translateY(-10px);
+        box-shadow: var(--shadow-hover);
+    }
+    
+    .service-card:hover::before {
+        transform: scaleX(1);
+    }
+    
+    .service-icon {
+        width: 80px;
+        height: 80px;
+        background: var(--light-blue);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 25px;
+        font-size: 35px;
+        color: var(--primary-teal);
+        transition: var(--transition);
+    }
+    
+    .service-card:hover .service-icon {
+        background: var(--gradient);
+        color: var(--white);
+        transform: rotateY(180deg);
+    }
+    
+    .service-card h3 {
+        font-size: 20px;
+        color: var(--dark-blue);
+        margin-bottom: 15px;
+    }
+    
+    .service-card p {
+        color: var(--gray-600);
+        font-size: 14px;
+        line-height: 1.7;
+        margin-bottom: 20px;
+    }
+    
+    .service-card a {
+        color: var(--primary-blue);
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .service-card a:hover {
+        color: var(--primary-teal);
+        gap: 12px;
+    }
+    
+    /* ==================== WHY CHOOSE US ==================== */
+    .why-us-section {
+        padding: 100px 0;
+        background: var(--white);
+    }
+    
+    .why-us-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 30px;
+    }
+    
+    .why-us-card {
+        text-align: center;
+        padding: 30px 20px;
+        border-radius: 15px;
+        transition: var(--transition);
+    }
+    
+    .why-us-card:hover {
+        background: var(--light-blue);
+    }
+    
+    .why-us-icon {
+        width: 100px;
+        height: 100px;
+        background: var(--gradient);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 25px;
+        font-size: 40px;
+        color: var(--white);
+        box-shadow: 0 10px 30px rgba(26, 115, 167, 0.3);
+    }
+    
+    .why-us-card h3 {
+        font-size: 18px;
+        color: var(--dark-blue);
+        margin-bottom: 10px;
+    }
+    
+    .why-us-card p {
+        color: var(--gray-600);
+        font-size: 14px;
+        line-height: 1.6;
+    }
+    
+    /* ==================== DOCTORS PREVIEW ==================== */
+    .doctors-preview {
+        background: linear-gradient(135deg, var(--dark-blue), #0a3a52);
+        padding: 100px 0;
+        color: var(--white);
+    }
+    
+    .doctors-preview .section-title h2 {
+        color: var(--white);
+    }
+    
+    .doctors-preview .section-title p {
+        color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .doctors-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 30px;
+    }
+    
+    .doctor-card {
+        background: var(--white);
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        transition: var(--transition);
+    }
+    
+    .doctor-card:hover {
+        transform: translateY(-10px);
+    }
+    
+    .doctor-image {
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .doctor-image img {
+        width: 100%;
+        height: 280px;
+        object-fit: cover;
+        transition: var(--transition);
+    }
+    
+    .doctor-card:hover .doctor-image img {
+        transform: scale(1.1);
+    }
+    
+    .doctor-social {
+        position: absolute;
+        bottom: -50px;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        transition: var(--transition);
+    }
+    
+    .doctor-card:hover .doctor-social {
+        bottom: 20px;
+    }
+    
+    .doctor-social a {
+        width: 40px;
+        height: 40px;
+        background: var(--white);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary-blue);
+        transition: var(--transition);
+    }
+    
+    .doctor-social a:hover {
+        background: var(--primary-teal);
+        color: var(--white);
+    }
+    
+    .doctor-info {
+        padding: 25px;
+        text-align: center;
+    }
+    
+    .doctor-info h3 {
+        font-size: 18px;
+        color: var(--dark-blue);
+        margin-bottom: 5px;
+    }
+    
+    .doctor-info p {
+        color: var(--primary-teal);
+        font-size: 14px;
+    }
+    
+    /* ==================== CTA SECTION ==================== */
+    .cta-section {
+        background: var(--gradient);
+        padding: 80px 0;
+        text-align: center;
+        color: var(--white);
+    }
+    
+    .cta-section h2 {
+        font-size: 42px;
+        margin-bottom: 20px;
+    }
+    
+    .cta-section p {
+        font-size: 18px;
+        opacity: 0.9;
+        max-width: 600px;
+        margin: 0 auto 30px;
+    }
+    
+    .cta-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+    }
+    
+    /* ==================== TESTIMONIALS PREVIEW ==================== */
+    .testimonials-preview {
+        padding: 100px 0;
+        background: var(--gray-100);
+    }
+    
+    .testimonials-slider {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+    }
+    
+    .testimonial-card {
+        background: var(--white);
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: var(--shadow);
+        position: relative;
+    }
+    
+    .testimonial-card::before {
+        content: '\f10d';
+        font-family: 'Font Awesome 6 Free', serif;
+        font-weight: 900;
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        font-size: 40px;
+        color: var(--light-blue);
+    }
+    
+    .testimonial-rating {
+        display: flex;
+        gap: 5px;
+        color: #ffd700;
+        margin-bottom: 20px;
+    }
+    
+    .testimonial-text {
+        color: var(--gray-600);
+        font-style: italic;
+        line-height: 1.8;
+        margin-bottom: 25px;
+    }
+    
+    .testimonial-author {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .testimonial-author img {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+    
+    .testimonial-author h4 {
+        font-size: 16px;
+        color: var(--dark-blue);
+        margin-bottom: 3px;
+    }
+    
+    .testimonial-author p {
+        font-size: 13px;
+        color: var(--gray-600);
+        margin: 0;
+    }
+    
+    /* ==================== RESPONSIVE ==================== */
+    @media (max-width: 1024px) {
+        .hero-content {
+            grid-template-columns: 1fr;
+            text-align: center;
+        }
+        
+        .hero-text h1 {
+            font-size: 42px;
+        }
+        
+        .hero-buttons {
+            justify-content: center;
+        }
+        
+        .hero-stats {
+            justify-content: center;
+        }
+        
+        .hero-image {
+            display: none;
+        }
+        
+        .about-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .services-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .why-us-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .doctors-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .testimonials-slider {
+            grid-template-columns: 1fr;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .hero-text h1 {
+            font-size: 32px;
+        }
+        
+        .hero-buttons {
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .hero-stats {
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .about-features {
+            grid-template-columns: 1fr;
+        }
+        
+        .services-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .why-us-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .doctors-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .cta-section h2 {
+            font-size: 28px;
+        }
+        
+        .cta-buttons {
+            flex-direction: column;
+            align-items: center;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+    <!-- Hero Section -->
+    <section class="page-header">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <div class="hero-badge">
+                        <i class="fas fa-star"></i>
+                        <span>Rated #1 Dental Clinic in the Region</span>
+                    </div>
+                    <h1>Your Smile is Our <span>Top Priority</span></h1>
+                    <p>Experience world-class dental care with our team of expert dentists. We combine cutting-edge technology with compassionate care to give you the smile you've always wanted.</p>
+                    <div class="hero-buttons">
+                        {% if app.session.get('patient_id') %}
+                            <a href="{{ path('app_appointment') }}" class="btn btn-secondary">
+                                <i class="fas fa-calendar-check"></i> Book Appointment
+                            </a>
+                        {% else %}
+                            <a href="{{ path('app_login') }}" class="btn btn-secondary">
+                                <i class="fas fa-calendar-check"></i> Book Appointment
+                            </a>
+                        {% endif %}
+                        <a href="{{ path('app_services') }}" class="btn btn-outline" style="border-color: white; color: white;">
+                            <i class="fas fa-play-circle"></i> Our Services
+                        </a>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="hero-stat">
+                            <h3>15+</h3>
+                            <p>Years Experience</p>
+                        </div>
+                        <div class="hero-stat">
+                            <h3>10K+</h3>
+                            <p>Happy Patients</p>
+                        </div>
+                        <div class="hero-stat">
+                            <h3>25+</h3>
+                            <p>Expert Dentists</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="assets/img/services.png" alt="MediDent Dental Care">
+                    <div class="hero-floating-card card-1">
+                        <div class="icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div>
+                            <h4>100% Safe</h4>
+                            <p>Sterilized Equipment</p>
+                        </div>
+                    </div>
+                    <div class="hero-floating-card card-2">
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h4>4.9/5</h4>
+                        <p>Patient Rating</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-card">
+                <h2>Stay Informed</h2>
+                <p>Subscribe to updates and dental tips</p>
+                {% for label, messages in app.flashes %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ label }}">{{ message }}</div>
+                    {% endfor %}
+                {% endfor %}
+                <form method="post" action="{{ path('app_contact') }}">
+                    <input type="hidden" name="subject" value="newsletter">
+                    <div class="form-row">
+                        <div class="form-group" style="flex:1;">
+                            <input type="email" name="email" placeholder="Enter your email" required>
+                        </div>
+                        <div class="form-group" style="flex:1;">
+                            <input type="text" name="name" placeholder="Your name" required>
+                        </div>
+                    </div>
+                    <input type="hidden" name="message" value="Subscribe me to the newsletter">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('contact') }}">
+                    <button type="submit" class="btn btn-primary">Subscribe</button>
+                </form>
+            </div>
+        </div>
+    </section>
+    
+    <!-- About Section -->
+    <section class="about-section section" id="about">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-images" data-aos="fade-right">
+                    <img src="assets/img/1 (2).jpg" alt="Our Clinic" class="about-main-image">
+                    <img src="assets/img/about1.png" alt="Our Team" class="about-secondary-image">
+                    <div class="about-experience-badge animate-pulse">
+                        <h3>15+</h3>
+                        <p>Years of<br>Excellence</p>
+                    </div>
+                </div>
+                <div class="about-content" data-aos="fade-left">
+                    <p class="subtitle">About MediDent</p>
+                    <h2>We're Committed to Your Dental Health</h2>
+                    <p>At MediDent, we believe everyone deserves a healthy, beautiful smile. Our state-of-the-art facility combines the latest dental technology with a warm, welcoming environment to ensure your comfort during every visit.</p>
+                    <p>Our team of experienced dentists and staff are dedicated to providing personalized care tailored to your unique needs. From routine cleanings to complex procedures, we're here to help you achieve optimal oral health.</p>
+                    <div class="about-features">
+                        <div class="about-feature">
+                            <i class="fas fa-check"></i>
+                            <span>Advanced Technology</span>
+                        </div>
+                        <div class="about-feature">
+                            <i class="fas fa-check"></i>
+                            <span>Expert Dentists</span>
+                        </div>
+                        <div class="about-feature">
+                            <i class="fas fa-check"></i>
+                            <span>Affordable Pricing</span>
+                        </div>
+                        <div class="about-feature">
+                            <i class="fas fa-check"></i>
+                            <span>Flexible Scheduling</span>
+                        </div>
+                    </div>
+                    <a href="{{ path('app_about') }}" class="btn btn-primary">
+                        <i class="fas fa-info-circle"></i> Learn More About Us
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Services Preview -->
+    <section class="services-preview section">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>Our Dental Services</h2>
+                <p>Comprehensive dental care solutions to keep your smile healthy and beautiful</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="service-icon">
+                        <i class="fas fa-tooth"></i>
+                    </div>
+                    <h3>General Dentistry</h3>
+                    <p>Comprehensive check-ups, cleanings, fillings, and preventive care to maintain your oral health.</p>
+                    <a href="{{ path('app_services') }}#general">Learn More <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="service-icon">
+                        <i class="fas fa-smile"></i>
+                    </div>
+                    <h3>Cosmetic Dentistry</h3>
+                    <p>Teeth whitening, veneers, and smile makeovers to enhance your beautiful smile.</p>
+                    <a href="{{ path('app_services') }}#cosmetic">Learn More <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="service-icon">
+                        <i class="fas fa-teeth"></i>
+                    </div>
+                    <h3>Orthodontics</h3>
+                    <p>Braces, aligners, and retainers to straighten your teeth and correct bite issues.</p>
+                    <a href="{{ path('app_services') }}#orthodontics">Learn More <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="service-icon">
+                        <i class="fas fa-teeth-open"></i>
+                    </div>
+                    <h3>Dental Implants</h3>
+                    <p>Permanent tooth replacement solutions that look and feel like natural teeth.</p>
+                    <a href="{{ path('app_services') }}#implants">Learn More <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="500">
+                    <div class="service-icon">
+                        <i class="fas fa-child"></i>
+                    </div>
+                    <h3>Pediatric Dentistry</h3>
+                    <p>Gentle and fun dental care specially designed for children of all ages.</p>
+                    <a href="{{ path('app_services') }}#pediatric">Learn More <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="600">
+                    <div class="service-icon">
+                        <i class="fas fa-ambulance"></i>
+                    </div>
+                    <h3>Emergency Care</h3>
+                    <p>Same-day emergency dental services for urgent dental problems and pain relief.</p>
+                    <a href="{{ path('app_services') }}#emergency">Learn More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Why Choose Us -->
+    <section class="why-us-section section">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>Why Choose MediDent</h2>
+                <p>We're dedicated to providing exceptional dental care that exceeds your expectations</p>
+            </div>
+            <div class="why-us-grid">
+                <div class="why-us-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="why-us-icon animate-float">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                    <h3>Expert Dentists</h3>
+                    <p>Our team consists of highly qualified and experienced dental professionals.</p>
+                </div>
+                <div class="why-us-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="why-us-icon animate-float" style="animation-delay: 0.5s;">
+                        <i class="fas fa-microscope"></i>
+                    </div>
+                    <h3>Latest Technology</h3>
+                    <p>We use state-of-the-art equipment for precise diagnosis and treatment.</p>
+                </div>
+                <div class="why-us-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="why-us-icon animate-float" style="animation-delay: 1s;">
+                        <i class="fas fa-hand-holding-heart"></i>
+                    </div>
+                    <h3>Patient Comfort</h3>
+                    <p>Your comfort is our priority with pain-free procedures and sedation options.</p>
+                </div>
+                <div class="why-us-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="why-us-icon animate-float" style="animation-delay: 1.5s;">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <h3>Affordable Care</h3>
+                    <p>Quality dental care at competitive prices with flexible payment options.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Doctors Preview -->
+    <section class="doctors-preview section">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>Meet Our Expert Dentists</h2>
+                <p>Our skilled team is dedicated to providing you with the best dental care possible</p>
+            </div>
+            <div class="doctors-grid">
+                <div class="doctor-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="doctor-image">
+                        <img src="assets/img/doctors/doctors-1.jpg" alt="Dr. John Smith">
+                        <div class="doctor-social">
+                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                    <div class="doctor-info">
+                        <h3>Dr. John Smith</h3>
+                        <p>Chief Dental Officer</p>
+                    </div>
+                </div>
+                <div class="doctor-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="doctor-image">
+                        <img src="assets/img/doctors/doctors-2.jpg" alt="Dr. Sarah Johnson">
+                        <div class="doctor-social">
+                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                    <div class="doctor-info">
+                        <h3>Dr. Sarah Johnson</h3>
+                        <p>Cosmetic Specialist</p>
+                    </div>
+                </div>
+                <div class="doctor-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="doctor-image">
+                        <img src="assets/img/doctors/doctors-3.jpg" alt="Dr. Michael Lee">
+                        <div class="doctor-social">
+                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                    <div class="doctor-info">
+                        <h3>Dr. Michael Lee</h3>
+                        <p>Orthodontist</p>
+                    </div>
+                </div>
+                <div class="doctor-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="doctor-image">
+                        <img src="assets/img/doctors/doctors-4.jpg" alt="Dr. Emily Davis">
+                        <div class="doctor-social">
+                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                    <div class="doctor-info">
+                        <h3>Dr. Emily Davis</h3>
+                        <p>Pediatric Dentist</p>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 50px;" data-aos="fade-up">
+                <a href="{{ path('app_doctors') }}" class="btn btn-secondary">
+                    View All Doctors <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- CTA Section -->
+    <section class="cta-section" data-aos="zoom-in">
+        <div class="container">
+            <h2>Ready for Your New Smile?</h2>
+            <p>Schedule your appointment today and take the first step towards a healthier, more beautiful smile.</p>
+            <div class="cta-buttons">
+                {% if app.session.get('patient_id') %}
+                <a href="{{ path('app_appointment') }}" class="btn btn-secondary">
+                    <i class="fas fa-calendar-check"></i> Book Appointment
+                </a>
+                {% else %}
+                <a href="{{ path('app_login') }}" class="btn btn-secondary">
+                    <i class="fas fa-calendar-check"></i> Book Appointment
+                </a>
+                {% endif %}
+                <a href="tel:+1234567890" class="btn btn-outline" style="border-color: white; color: white;">
+                    <i class="fas fa-phone-alt"></i> Call Now
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Testimonials Preview -->
+    <section class="testimonials-preview section">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>What Our Patients Say</h2>
+                <p>Don't just take our word for it - hear from our satisfied patients</p>
+            </div>
+            <div class="testimonials-slider">
+                <div class="testimonial-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="testimonial-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="testimonial-text">"The best dental experience I've ever had! The staff is incredibly friendly and professional. Dr. Smith made me feel completely at ease during my root canal."</p>
+                    <div class="testimonial-author">
+                        <img src="assets/img/testimonials/testimonials-1.jpg" alt="Jennifer M.">
+                        <div>
+                            <h4>Jennifer M.</h4>
+                            <p>Regular Patient</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="testimonial-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="testimonial-text">"Amazing results with my Invisalign treatment! My smile has never looked better. The entire team at MediDent is professional and caring."</p>
+                    <div class="testimonial-author">
+                        <img src="assets/img/testimonials/testimonials-2.jpg" alt="Robert K.">
+                        <div>
+                            <h4>Robert K.</h4>
+                            <p>Orthodontics Patient</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="testimonial-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="testimonial-text">"My kids actually look forward to their dental visits now! Dr. Davis is fantastic with children. Highly recommend MediDent for families."</p>
+                    <div class="testimonial-author">
+                        <img src="assets/img/testimonials/testimonials-3.jpg" alt="Sarah T.">
+                        <div>
+                            <h4>Sarah T.</h4>
+                            <p>Parent</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 50px;" data-aos="fade-up">
+                <a href="{{ path('app_reviews') }}" class="btn btn-primary">
+                    View All Reviews <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+{% endblock %}

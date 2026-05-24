@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Invoice #{{ payment.id }} - MediDent</title>
+    <style>
+        body { font-family: DejaVu Sans, Arial, sans-serif; background:#f7f9fc; color:#0f172a; }
+        .invoice { max-width: 820px; margin: 0 auto; background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; }
+        .invoice-header { display:flex; justify-content:space-between; align-items:flex-start; padding: 24px; border-bottom: 1px solid #e5e7eb; }
+        .brand { display:flex; align-items:center; gap:12px; }
+        .brand img { height: 44px; border-radius: 6px; background:#fff; padding:6px; border:1px solid #e5e7eb; }
+        .brand h3 { margin:0; font-size: 20px; }
+        .muted { color:#64748b; }
+        .invoice-meta { text-align:right; }
+        .invoice-meta h2 { margin:0; font-size: 22px; }
+        .invoice-body { padding: 24px; display:grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        .panel { border:1px solid #e5e7eb; border-radius:8px; padding:16px; }
+        .panel h4 { margin:0 0 8px 0; font-size: 14px; }
+        .invoice-items { padding: 0 24px 24px; }
+        table { width:100%; border-collapse:collapse; }
+        th { background:#f1f5f9; font-weight:600; font-size:13px; }
+        th, td { padding:12px 14px; border-bottom:1px solid #e5e7eb; text-align:left; }
+        .totals { padding: 0 24px 24px; display:grid; grid-template-columns: 1fr 240px; }
+        .totals table { width:100%; }
+        .totals td { padding:8px 0; }
+        .totals .label { color:#334155; }
+        .totals .value { text-align:right; font-weight:600; }
+        .footer { padding: 0 24px 24px; color:#64748b; font-size:12px; }
+        @page { margin: 24px; }
+    </style>
+</head>
+<body>
+    <div class="invoice">
+        <div class="invoice-header">
+            <div class="brand">
+                <div>
+                    <h3>MediDent</h3>
+                    <div class="muted">Dental Clinic</div>
+                </div>
+            </div>
+            <div class="invoice-meta">
+                <h2>Invoice #{{ payment.id }}</h2>
+                <div class="muted">{{ payment.createdAt|date('Y-m-d H:i') }}</div>
+            </div>
+        </div>
+        <div class="invoice-body">
+            <div class="panel">
+                <h4>Billed To</h4>
+                {% if payment.appointment %}
+                    <div>{{ payment.appointment.patient }}</div>
+                    <div class="muted">{{ payment.appointment.patientEmail ?: '' }}</div>
+                {% else %}
+                    <div>—</div>
+                {% endif %}
+            </div>
+            <div class="panel">
+                <h4>Invoice Details</h4>
+                {% if payment.appointment %}
+                    <div>Service: {{ payment.appointment.service }}</div>
+                    <div>Date: {{ payment.appointment.scheduledAt|date('Y-m-d H:i') }}</div>
+                {% endif %}
+                <div>Method: {{ payment.method }}</div>
+                <div>Status: {{ payment.status }}</div>
+                <div>Reference: {{ payment.reference ?: '—' }}</div>
+            </div>
+        </div>
+        <div class="invoice-items">
+            <table>
+                <thead><tr><th>Description</th><th>Qty</th><th>Unit Price</th><th>Total</th></tr></thead>
+                <tbody>
+                    <tr>
+                        <td>Dental Appointment{% if payment.appointment %} — {{ payment.appointment.service }}{% endif %}</td>
+                        <td>1</td>
+                        <td>{{ payment.amount }} {{ payment.currency }}</td>
+                        <td>{{ payment.amount }} {{ payment.currency }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="totals">
+            <div></div>
+            <table>
+                <tr><td class="label">Subtotal</td><td class="value">{{ payment.amount }} {{ payment.currency }}</td></tr>
+                <tr><td class="label">Tax</td><td class="value">0.00 {{ payment.currency }}</td></tr>
+                <tr><td class="label">Total</td><td class="value">{{ payment.amount }} {{ payment.currency }}</td></tr>
+            </table>
+        </div>
+        <div class="footer">Thank you for choosing MediDent. For questions, contact us at info@medident.com.</div>
+    </div>
+</body>
+</html>

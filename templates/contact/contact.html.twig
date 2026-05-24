@@ -1,0 +1,568 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contact Us - MediDent{% endblock %}
+
+{% block styles %}
+<style>
+    /* Page Header */
+    .page-header {
+        background: linear-gradient(135deg, rgba(26, 115, 167, 0.95), rgba(45, 189, 182, 0.9)), var(--page-header-image) center/cover;
+        padding: 120px 0 80px;
+        text-align: center;
+        color: var(--white);
+    }
+    
+    .page-header h1 {
+        font-size: 48px;
+        margin-bottom: 15px;
+    }
+    
+    .breadcrumb {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        list-style: none;
+    }
+    
+    .breadcrumb a {
+        color: rgba(255, 255, 255, 0.8);
+    }
+    
+    .breadcrumb a:hover {
+        color: var(--white);
+    }
+    
+    .breadcrumb .active {
+        color: var(--white);
+    }
+    
+    /* Contact Cards Section */
+    .contact-cards-section {
+        padding: 100px 0 50px;
+        margin-top: -50px;
+    }
+    
+    .contact-cards-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 30px;
+    }
+    
+    .contact-card {
+        background: var(--white);
+        border-radius: 20px;
+        padding: 40px 30px;
+        text-align: center;
+        box-shadow: var(--shadow);
+        transition: var(--transition);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .contact-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: var(--gradient);
+        transform: scaleX(0);
+        transition: var(--transition);
+    }
+    
+    .contact-card:hover {
+        transform: translateY(-10px);
+        box-shadow: var(--shadow-hover);
+    }
+    
+    .contact-card:hover::before {
+        transform: scaleX(1);
+    }
+    
+    .contact-card-icon {
+        width: 80px;
+        height: 80px;
+        background: var(--light-blue);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 25px;
+        font-size: 32px;
+        color: var(--primary-teal);
+        transition: var(--transition);
+    }
+    
+    .contact-card:hover .contact-card-icon {
+        background: var(--gradient);
+        color: var(--white);
+        transform: rotateY(180deg);
+    }
+    
+    .contact-card h3 {
+        font-size: 18px;
+        color: var(--dark-blue);
+        margin-bottom: 10px;
+    }
+    
+    .contact-card p {
+        color: var(--gray-600);
+        font-size: 14px;
+        line-height: 1.6;
+    }
+    
+    .contact-card a {
+        color: var(--primary-blue);
+        font-weight: 500;
+    }
+    
+    .contact-card a:hover {
+        color: var(--primary-teal);
+    }
+    
+    /* Main Contact Section */
+    .main-contact-section {
+        padding: 50px 0 100px;
+    }
+    
+    .contact-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 50px;
+    }
+    
+    /* Contact Form */
+    .contact-form-card {
+        background: var(--white);
+        border-radius: 20px;
+        padding: 50px;
+        box-shadow: var(--shadow);
+    }
+    
+    .contact-form-card h2 {
+        font-size: 28px;
+        color: var(--dark-blue);
+        margin-bottom: 10px;
+    }
+    
+    .contact-form-card .subtitle {
+        color: var(--gray-600);
+        margin-bottom: 30px;
+    }
+    
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group label {
+        display: block;
+        font-weight: 500;
+        margin-bottom: 8px;
+        color: var(--gray-800);
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 15px 20px;
+        border: 2px solid var(--gray-200);
+        border-radius: 12px;
+        font-family: inherit;
+        font-size: 15px;
+        transition: var(--transition);
+    }
+    
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: var(--primary-teal);
+        box-shadow: 0 0 0 4px rgba(45, 189, 182, 0.1);
+    }
+    
+    .form-group textarea {
+        min-height: 150px;
+        resize: vertical;
+    }
+    
+    /* Map Section */
+    .map-section {
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+    }
+    
+    .map-section iframe {
+        width: 100%;
+        height: 400px;
+        border: none;
+    }
+    
+    .map-info {
+        background: var(--white);
+        padding: 30px;
+    }
+    
+    .map-info h3 {
+        font-size: 20px;
+        color: var(--dark-blue);
+        margin-bottom: 20px;
+    }
+    
+    .working-hours {
+        list-style: none;
+    }
+    
+    .working-hours li {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--gray-200);
+    }
+    
+    .working-hours li:last-child {
+        border-bottom: none;
+    }
+    
+    .working-hours li span:first-child {
+        color: var(--gray-600);
+    }
+    
+    .working-hours li span:last-child {
+        font-weight: 600;
+        color: var(--dark-blue);
+    }
+    
+    .working-hours li.today {
+        background: var(--light-blue);
+        margin: 0 -30px;
+        padding: 12px 30px;
+    }
+    
+    /* FAQ Section */
+    .faq-section {
+        padding: 100px 0;
+        background: var(--gray-100);
+    }
+    
+    .faq-grid {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    
+    .faq-item {
+        background: var(--white);
+        border-radius: 15px;
+        margin-bottom: 15px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+    }
+    
+    .faq-question {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 25px 30px;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+    
+    .faq-question:hover {
+        background: var(--light-blue);
+    }
+    
+    .faq-question h4 {
+        font-size: 16px;
+        color: var(--dark-blue);
+        margin: 0;
+    }
+    
+    .faq-question i {
+        color: var(--primary-teal);
+        transition: var(--transition);
+    }
+    
+    .faq-item.active .faq-question i {
+        transform: rotate(180deg);
+    }
+    
+    .faq-answer {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+    }
+    
+    .faq-item.active .faq-answer {
+        max-height: 200px;
+    }
+    
+    .faq-answer p {
+        padding: 0 30px 25px;
+        color: var(--gray-600);
+        line-height: 1.7;
+    }
+    
+    @media (max-width: 1024px) {
+        .contact-cards-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .contact-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .page-header h1 {
+            font-size: 32px;
+        }
+        
+        .contact-cards-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .contact-form-card {
+            padding: 30px 20px;
+        }
+        
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+    <!-- Page Header -->
+    <section class="page-header" style="--page-header-image: url('https://images.unsplash.com/photo-1588771934966-7aa12acb266a?q=80&w=1920&auto=format&fit=crop')">
+        <div class="container">
+            <h1 data-aos="fade-up">Contact Us</h1>
+            <ul class="breadcrumb" data-aos="fade-up" data-aos-delay="100">
+                <li><a href="{{ path('app_home') }}">Home</a></li>
+                <li>/</li>
+                <li class="active">Contact</li>
+            </ul>
+        </div>
+    </section>
+    
+    <!-- Contact Cards -->
+    <section class="contact-cards-section">
+        <div class="container">
+            <div class="contact-cards-grid">
+                <div class="contact-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="contact-card-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h3>Visit Us</h3>
+                    <p>08 Rue Newton, Ariana 2088<br>Suite 200, Healthcare City</p>
+                </div>
+                <div class="contact-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="contact-card-icon">
+                        <i class="fas fa-phone-alt"></i>
+                    </div>
+                    <h3>Call Us</h3>
+                    <p><a href="tel:+21622555444">+216 22 555 444</a><br><a href="tel:+21697222555">+216 97 222 555</a></p>
+                </div>
+                <div class="contact-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="contact-card-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h3>Email Us</h3>
+                    <p><a href="mailto:info@medident.com">info@medident.com</a><br><a href="mailto:support@medident.com">support@medident.com</a></p>
+                </div>
+                <div class="contact-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="contact-card-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>Working Hours</h3>
+                    <p>Mon-Fri: 8AM - 7PM<br>Sat: 9AM - 5PM</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Main Contact Section -->
+    <section class="main-contact-section">
+        <div class="container">
+            <div class="contact-grid">
+                <!-- Contact Form -->
+                <div class="contact-form-card" data-aos="fade-right">
+                    <h2>Send Us a Message</h2>
+                    <p class="subtitle">Have a question? We'd love to hear from you.</p>
+                    
+                    <form action="{{ path('app_contact') }}" method="POST">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="name">Full Name</label>
+                                <input type="text" id="name" name="name" placeholder="Enter your name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input type="tel" id="phone" name="phone" placeholder="Enter your phone">
+                            </div>
+                            <div class="form-group">
+                                <label for="subject">Subject</label>
+                                <select id="subject" name="subject">
+                                    <option value="">Select a subject</option>
+                                    <option value="appointment">Appointment Inquiry</option>
+                                    <option value="services">Services Information</option>
+                                    <option value="pricing">Pricing & Insurance</option>
+                                    <option value="feedback">Feedback</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Your Message</label>
+                            <textarea id="message" name="message" placeholder="How can we help you?" required></textarea>
+                        </div>
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('contact') }}">
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">
+                            <i class="fas fa-paper-plane"></i> Send Message
+                        </button>
+                        {% for label, messages in app.flashes %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{ label }}" style="margin-top: 10px;">{{ message }}</div>
+                            {% endfor %}
+                        {% endfor %}
+                    </form>
+                </div>
+                
+                <!-- Map & Hours -->
+                <div class="map-section" data-aos="fade-left">
+                    <iframe 
+                        src="https://www.google.com/maps?q=Tekup%20University,%20Tunisia&output=embed"
+                        allowfullscreen=""
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                    <div class="map-info">
+                        <h3><i class="fas fa-clock" style="color: var(--primary-teal); margin-right: 10px;"></i>Working Hours</h3>
+                        <ul class="working-hours">
+                            <li>
+                                <span>Monday</span>
+                                <span>8:00 AM - 7:00 PM</span>
+                            </li>
+                            <li>
+                                <span>Tuesday</span>
+                                <span>8:00 AM - 7:00 PM</span>
+                            </li>
+                            <li>
+                                <span>Wednesday</span>
+                                <span>8:00 AM - 7:00 PM</span>
+                            </li>
+                            <li>
+                                <span>Thursday</span>
+                                <span>8:00 AM - 7:00 PM</span>
+                            </li>
+                            <li>
+                                <span>Friday</span>
+                                <span>8:00 AM - 7:00 PM</span>
+                            </li>
+                            <li>
+                                <span>Saturday</span>
+                                <span>9:00 AM - 5:00 PM</span>
+                            </li>
+                            <li>
+                                <span>Sunday</span>
+                                <span>Emergency Only</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- FAQ Section -->
+    <section class="faq-section">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>Frequently Asked Questions</h2>
+                <p>Find answers to common questions about our services</p>
+            </div>
+            
+            <div class="faq-grid">
+                <div class="faq-item" data-aos="fade-up">
+                    <div class="faq-question">
+                        <h4>How do I schedule an appointment?</h4>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>You can schedule an appointment by calling our office, using our online booking system, or filling out the contact form on this page. We'll get back to you within 24 hours to confirm your appointment.</p>
+                    </div>
+                </div>
+                <div class="faq-item" data-aos="fade-up" data-aos-delay="100">
+                    <div class="faq-question">
+                        <h4>Do you accept dental insurance?</h4>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes, we accept most major dental insurance plans. Please contact our office with your insurance information, and we'll verify your coverage before your appointment.</p>
+                    </div>
+                </div>
+                <div class="faq-item" data-aos="fade-up" data-aos-delay="200">
+                    <div class="faq-question">
+                        <h4>What should I bring to my first appointment?</h4>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Please bring a valid photo ID, your insurance card, a list of current medications, and any relevant dental records or X-rays from previous dentists.</p>
+                    </div>
+                </div>
+                <div class="faq-item" data-aos="fade-up" data-aos-delay="300">
+                    <div class="faq-question">
+                        <h4>Do you offer emergency dental services?</h4>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes, we offer same-day emergency dental services. If you're experiencing a dental emergency, please call our emergency line immediately at +1 (234) 567-891.</p>
+                    </div>
+                </div>
+                <div class="faq-item" data-aos="fade-up" data-aos-delay="400">
+                    <div class="faq-question">
+                        <h4>What payment options do you offer?</h4>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>We accept cash, credit cards, and offer flexible payment plans for larger treatments. We also work with CareCredit and other healthcare financing options.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // FAQ Accordion
+    document.querySelectorAll('.faq-question').forEach(question => {
+        question.addEventListener('click', () => {
+            const item = question.parentElement;
+            const isActive = item.classList.contains('active');
+            
+            // Close all items
+            document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+            
+            // Open clicked item if it wasn't active
+            if (!isActive) {
+                item.classList.add('active');
+            }
+        });
+    });
+</script>
+{% endblock %}
