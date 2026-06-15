@@ -75,7 +75,8 @@ php bin/console doctrine:schema:update --force
 ### 5. Démarrer le serveur
 
 ```bash
-php -S localhost:8000 -t public
+php -S localhost:8000 -t public 
+symfony server:start  
 ```
 
 L'application sera accessible sur `http://localhost:8000`
