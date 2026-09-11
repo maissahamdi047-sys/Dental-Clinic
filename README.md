@@ -1,158 +1,179 @@
-# 🦷 Cabinet Dentaire Management System
+# 🦷 Dental Clinic Management System
 
-Application web professionnelle pour la gestion de cabinets dentaires développée avec Symfony 6.4.
+Professional web application for managing dental clinics, developed with Symfony 6.4.
 
-## 📋 Table des matières
+## 📋 Table of Contents
 
-- [Fonctionnalités](#fonctionnalités)
-- [Stack Technique](#stack-technique)
-- [Prérequis](#prérequis)
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [Tests de paiement](#tests-de-paiement)
-- [Configuration des emails](#configuration-des-emails)
-- [Accès](#accès)
-- [Licence](#licence)
+- [Features](#-features)
+- [Technology Stack](#️-technology-stack)
+- [Requirements](#-requirements)
+- [Installation](#-installation)
+- [Configuration](#️-configuration)
+- [Payment Testing](#-payment-testing)
+- [Email Configuration](#-email-configuration)
+- [Access](#-access)
+- [License](#-license)
 
-## ✨ Fonctionnalités
+## ✨ Features
 
-- **Gestion des patients** : Inscription, profils, historique médical
-- **Prise de rendez-vous** : Calendrier en ligne avec confirmations
-- **Administration** : Tableau de bord, facturation, rapports
-- **Paiements** : Intégration Stripe sécurisée
-- **Documents** : Génération PDF pour prescriptions et factures
-- **Sécurité** : Protection des données patients (RGPD)
+- **Patient Management**: Registration, profiles, and medical history
+- **Appointment Scheduling**: Online calendar with confirmations
+- **Administration**: Dashboard, billing, and reports
+- **Payments**: Secure Stripe integration
+- **Documents**: PDF generation for prescriptions and invoices
+- **Security**: Patient data protection (GDPR)
 
-## 🛠️ Stack Technique
+## 🛠️ Technology Stack
 
-- **Backend** : Symfony 6.4, Doctrine ORM, MySQL
-- **Frontend** : Twig
-- **Services** : Stripe (paiements), DomPDF (PDF), Mailer (emails)
+- **Backend**: Symfony 6.4, Doctrine ORM, MySQL
+- **Frontend**: Twig
+- **Services**: Stripe (payments), DomPDF (PDF), Mailer (emails)
 
-## 📦 Prérequis
+## 📦 Requirements
 
-- PHP 8.2 ou supérieur
+- PHP 8.2 or higher
 - Composer
-- MySQL 8.0 ou supérieur
-- XAMPP (pour Windows) ou équivalent
+- MySQL 8.0 or higher
+- XAMPP (for Windows) or equivalent
 
 ## 🚀 Installation
 
-### 1. Cloner le projet
+### 1. Clone the Project
 
 ```bash
 git clone https://github.com/maissahamdi047-sys/cabinet-dentaire.git
 cd cabinet-dentaire
 ```
 
-### 2. Installer les dépendances
+### 2. Install Dependencies
 
 ```bash
 composer install
 ```
 
-### 3. Configurer l'environnement
+### 3. Configure the Environment
 
 ```bash
 cp .env .env.local
 ```
 
-Éditer `.env.local` avec vos credentials (voir section [Configuration](#configuration)).
+Edit `.env.local` with your credentials. See the [Configuration](#️-configuration) section.
 
-### 4. Créer la base de données
+### 4. Create the Database
 
 ```bash
-# Créer la base de données MySQL
+# Create the MySQL database
 mysql -u root -e "CREATE DATABASE IF NOT EXISTS cabinet CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 
-# Créer le schema
+# Create the database schema
 php bin/console doctrine:schema:create
 
-# Ou mettre à jour le schema
+# Or update the existing schema
 php bin/console doctrine:schema:update --force
 ```
 
-### 5. Démarrer le serveur
+### 5. Start the Server
 
 ```bash
-php -S localhost:8000 -t public 
-symfony server:start  
+php -S localhost:8000 -t public
 ```
 
-L'application sera accessible sur `http://localhost:8000`
+Or:
+
+```bash
+symfony server:start
+```
+
+The application will be available at:
+
+```text
+http://localhost:8000
+```
 
 ## ⚙️ Configuration
 
-Variables d'environnement requises dans `.env.local` :
+Required environment variables in `.env.local`:
 
 ```env
-# Base de données
+# Database
 DATABASE_URL="mysql://root:@127.0.0.1:3306/cabinet?serverVersion=8.0.32&charset=utf8mb4"
 
-# Stripe (optionnel, pour les paiements)
-STRIPE_PUBLIC_KEY="pk_test_votre_cle_publique_stripe"
-STRIPE_SECRET_KEY="sk_test_votre_cle_secrete_stripe"
+# Stripe (optional, for payments)
+STRIPE_PUBLIC_KEY="pk_test_your_public_stripe_key"
+STRIPE_SECRET_KEY="sk_test_your_secret_stripe_key"
 
-# Mailer (optionnel, pour les emails)
+# Mailer (optional, for emails)
 MAILER_DSN="null://null"
-# Pour utiliser Mailpit : MAILER_DSN="smtp://localhost:1025"
+# To use Mailpit: MAILER_DSN="smtp://localhost:1025"
 ```
 
+## 💳 Payment Testing
 
+To test payments in development using Stripe:
 
-## 💳 Tests de paiement
+**Test card (successful payment):**
 
-Pour tester les paiements en développement avec Stripe :
+- Number: `4242 4242 4242 4242`
+- Type: Visa
+- CVV: `123`
+- Expiration date: `12/25`
 
-**Carte de test (succès) :**
-- Numéro : `4242 4242 4242 4242`
-- Type : Visa
-- CVV : `123`
-- Date d'expiration : `12/25`
+**To obtain Stripe keys:**
 
-**Pour obtenir des clés Stripe :**
-1. Créez un compte sur [Stripe](https://dashboard.stripe.com/register)
-2. Allez dans [API Keys](https://dashboard.stripe.com/apikeys)
-3. Copiez les clés de test (pk_test_... et sk_test_...)
-4. Ajoutez-les dans votre fichier `.env.local`
+1. Create an account on Stripe.
+2. Go to **API Keys**.
+3. Copy your test keys (`pk_test_...` and `sk_test_...`).
+4. Add them to your `.env.local` file.
 
-## 📧 Configuration des emails
+## 📧 Email Configuration
 
-### Option 1 : Désactivé (développement)
+### Option 1: Disabled (Development)
 
 ```env
 MAILER_DSN="null://null"
 ```
 
-Les emails ne sont pas envoyés (configuration par défaut).
+Emails will not be sent. This is the default configuration.
 
-### Option 2 : Avec Mailpit (recommandé pour le développement)
+### Option 2: Using Mailpit (Recommended for Development)
 
-1. **Télécharger Mailpit** : https://github.com/axllent/mailpit/releases
-2. **Extraire le fichier ZIP** dans un dossier (ex: `C:\mailpit`)
-3. **Démarrer Mailpit** :
-   - Ouvrir l'invite de commandes
-   - Naviguer vers le dossier : `cd C:\mailpit`
-   - Exécuter : `mailpit.exe`
-4. **Accéder à l'interface** :
-   - Mailpit affichera un lien (généralement http://127.0.0.1:8025)
-   - Cliquer sur ce lien pour ouvrir l'interface web
-5. **Configurer le mailer** :
+1. **Download Mailpit** from its official releases page.
+2. **Extract the ZIP file** into a folder, for example:
+   ```text
+   C:\mailpit
+   ```
+3. **Start Mailpit**:
+   - Open Command Prompt.
+   - Navigate to the folder:
+     ```bash
+     cd C:\mailpit
+     ```
+   - Run:
+     ```bash
+     mailpit.exe
+     ```
+4. **Access the web interface**:
+   - Mailpit usually provides the interface at:
+     ```text
+     http://127.0.0.1:8025
+     ```
+5. **Configure the mailer**:
+
    ```env
    MAILER_DSN="smtp://localhost:1025"
    ```
 
-Tous les emails envoyés par l'application apparaîtront dans l'interface Mailpit.
+All emails sent by the application will appear in the Mailpit interface.
 
-## 🌐 Accès
+## 🌐 Access
 
-- **Site public** : `http://localhost:8000`
-- **Administration** : `http://localhost:8000/admin`
+- **Public Website**: `http://localhost:8000`
+- **Administration**: `http://localhost:8000/admin`
 
-## 📄 Licence
+## 📄 License
 
-Propriétaire - Tous droits réservés
+Proprietary - All rights reserved.
 
 ---
 
-*Développé pour les professionnels de santé* 🏥
+*Developed for healthcare professionals* 🏥
